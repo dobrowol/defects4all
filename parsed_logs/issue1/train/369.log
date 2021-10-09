@@ -1,0 +1,8 @@
+1137['TX', 'zNewCarrier1', 'antenna1a']
+1137['TX', 'zNewCarrier2', 'antenna1a']
+937['zNewCarrier1', 'dfeChannelId:0']
+938['zNewCarrier1']
+939['zNewCarrier1,', '0,', ':1', '0,', '4']
+924['MadeDfeResourceAllocator::allocate::TX', '0,', '4']
+928['1']
+940['zNewCarrier2,', '1']

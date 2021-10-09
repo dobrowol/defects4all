@@ -1,0 +1,5 @@
+1097['0', 'pathName', 'antenna1a']
+1097['0', 'pathId', 'dlpath1']
+1101['54.000000[V]']
+1099['paPsuId=[0],', 'voltage=[54.00],', 'maxVoltage=[56.00],', 'ovpThreshold=[0.00],', 'ocpThreshold=[0.00],', 'enable=[1]']
+1100['paPsuId:0', 'voltage:54.000000']

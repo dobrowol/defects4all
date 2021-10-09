@@ -1,0 +1,4 @@
+1121['RUNTIME', 'ENABLED.']
+375['draco::interface::message::UlPathModeConfigureReq', '3235)', 'dracort::', '30000ms)']
+376['3236', '30000']
+377['draco::interface::message::UlPathModeConfigureResp', '3236)', 'dracort::']

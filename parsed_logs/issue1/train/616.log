@@ -1,0 +1,4 @@
+375['draco::interface::message::RficHwStateSubscribeReq', '3105)', 'dracort::', '30000ms)']
+376['3106', '30000']
+377['draco::interface::message::RficHwStateSubscribeResp', '3106)', 'dracort::']
+1165['3105)']

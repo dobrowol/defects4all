@@ -1,0 +1,8 @@
+1105['readRxArray', 'antenna1a', 'rxArray1']
+1105['readRxArray', 'antenna2a', 'rxArray1']
+1105['readRxArray', 'antenna3a', 'rxArray1']
+1105['readRxArray', 'antenna4a', 'rxArray1']
+1105['readTxArray', 'antenna1a', 'txArray1']
+1105['readTxArray', 'antenna2a', 'txArray1']
+1105['readTxArray', 'antenna3a', 'txArray1']
+1105['readTxArray', 'antenna4a', 'txArray1']
