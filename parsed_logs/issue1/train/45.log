@@ -1,4 +1,4 @@
-None[]
-None[]
-None[]
-None[]
+57['TX', 'Lte.Tx10MHz']
+57['RX', 'Lte.Rx10MHz']
+58['carrier:Lte.Rx10MHz', '3', '4']
+58['carrier:Lte.Tx10MHz', '3', '4']

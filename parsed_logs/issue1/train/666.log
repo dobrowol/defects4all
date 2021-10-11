@@ -1,2 +1,2 @@
-1193['fLo:3510000000', 'fL:3410000000', 'fH:3430000000', 'freqMin:3410000000', 'freqMax:3700000000', 'IBW:20000000', 'maxIBW:200000000']
-1194['fL:3410000000', 'currentFLoMinusHalfMaxIbw:3410000000', 'fH:3430000000', 'currentFLoPlusHalfMaxIbw:3610000000', 'conditions:[(1', '1)', '1]']
+1191['fLo:3510000000', 'fL:3410000000', 'fH:3430000000', 'freqMin:3410000000', 'freqMax:3700000000', 'IBW:20000000', 'maxIBW:200000000']
+1192['fL:3410000000', 'currentFLoMinusHalfMaxIbw:3410000000', 'fH:3430000000', 'currentFLoPlusHalfMaxIbw:3610000000', 'conditions:[(1', '1)', '1]']

@@ -1,5 +1,5 @@
-1137['TX', 'LTE.TxMain.1', 'antenna1a']
-1137['TX', 'LTE.TxMain.2', 'antenna1a']
+61['TX', 'LTE.TxMain.1', 'antenna1a']
+61['TX', 'LTE.TxMain.2', 'antenna1a']
 1034['PaPsuBiasWisdomCalculator::PaPsuBiasId=0', 'disabled', 'PsuId=0']
 1034['PaPsuBiasWisdomCalculator::PaPsuBiasId=0', 'disabled', 'PsuId=0']
 1034['PaPsuBiasWisdomCalculator::PaPsuBiasId=0', 'disabled', 'PsuId=2']

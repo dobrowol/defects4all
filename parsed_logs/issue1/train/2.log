@@ -1,3 +1,3 @@
-None[]
-None[]
-None[]
+1[]
+2['dfeStreamId=1', 'dfeChannelId=1,gainOffset=10.000000', 'recalculatedGainOffset=5.000000', 'saturationLevel=20', 'gPwrConfig=-20.000000dB', 'offset=-5.000000dB']
+2['dfeStreamId=1', 'dfeChannelId=9,gainOffset=-10.000000', 'recalculatedGainOffset=-15.000000', 'saturationLevel=0', 'gPwrConfig=-20.000000dB', 'offset=-5.000000dB']

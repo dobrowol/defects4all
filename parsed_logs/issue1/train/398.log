@@ -1,5 +1,5 @@
-None[]
-None[]
+57['TX', 'defaultCarrier5g']
+57['TX', 'defaultCarrier5g']
 981["carrierName='defaultCarrier5g'", 'dfeiAxC=0', 'deactivation:0']
 982["carrierName='defaultCarrier5g'", 'routerStreamId=2']
 987['[OperationBuilderDownlinkImpl::isBaseBandDataMode()]', "carrierName='defaultCarrier5g'"]

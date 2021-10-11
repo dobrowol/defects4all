@@ -1,4 +1,4 @@
-None[]
-None[]
-None[]
-None[]
+3[]
+18[]
+19['(addr=0x0014)']
+17['spiReadBits', 'offset', '0x0014']
