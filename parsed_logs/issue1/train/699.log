@@ -1,5 +1,2 @@
-1222[]
-1223[]
-375['draco::interface::message::TDDSwitchConfigReq', '3358)', 'dracort::', '30000ms)']
-376['3359', '30000']
-377['draco::interface::message::TDDSwitchConfigResp', '3359)', 'dracort::']
+599['DL=3714.583333[usec]', 'GP=129.687500[usec]', 'UL=1155.729167[usec]']
+601['5000']

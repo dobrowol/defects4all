@@ -1,2 +1,2 @@
-616['CREATE', 'ncoFrequency:10000']
-617['dfeChannelId=1,', 'ncoFrequency[Hz]=10000']
+498['CREATE', 'ncoFrequency:10000']
+500['hwInstanceId=0,', 'dfeChannelId=1,', 'LTE,', '20000000,', '0,', '0),', 'ncoFrequencyInHz[Hz]=10000,', 'dlGsmCarrierId=15']

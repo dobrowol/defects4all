@@ -1,4 +1,2 @@
-615['txLo1']
-615['txLo2']
-615['rxLo1']
-615['rxLo2']
+498['MODIFY', 'ncoFrequency:11000']
+499['dfeChannelId=1,', 'ncoFrequency[Hz]=11000']

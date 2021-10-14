@@ -1,6 +1,1 @@
-57['TX', 'defaultCarrier5g']
-57['TX', 'defaultCarrier5g']
-1009['dfeHwBlockInstanceId:0,', 'dfeStreamId:2,', 'dfeChannelId:1']
-981["carrierName='defaultCarrier5g'", 'dfeiAxC=0', 'deactivation:1']
-984['100000000,', '32,', '32)', '1']
-987['[OperationBuilderDownlinkImpl::isBaseBandDataMode()]', "carrierName='defaultCarrier5g'"]
+639['2']

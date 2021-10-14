@@ -1,4 +1,4 @@
-1190['3130', '5']
-375['draco::interface::message::RficRtRfPllSetFrequencyReq', '3130)', 'dracort::', '30000ms)']
-376['3131', '30000']
-377['draco::interface::message::RficRtRfPllSetFrequencyResp', '3131)', 'dracort::']
+824['fLo:3510000000', 'fL:3410000000', 'fH:3430000000', 'freqMin:3410000000', 'freqMax:3700000000', 'IBW:20000000', 'maxIBW:200000000']
+825['fL:3410000000', 'currentFLoMinusHalfMaxIbw:3410000000', 'fH:3430000000', 'currentFLoPlusHalfMaxIbw:3610000000', 'conditions:[(1', '1)', '1]']
+824['fLo:3510000000', 'fL:3410000000', 'fH:3610000000', 'freqMin:3410000000', 'freqMax:3700000000', 'IBW:200000000', 'maxIBW:200000000']
+825['fL:3410000000', 'currentFLoMinusHalfMaxIbw:3410000000', 'fH:3610000000', 'currentFLoPlusHalfMaxIbw:3610000000', 'conditions:[(1', '1)', '1]']

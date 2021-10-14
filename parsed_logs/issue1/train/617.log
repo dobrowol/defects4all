@@ -1,4 +1,3 @@
 67['3105']
-1164['Request', 'received', 'from', 'cpId', '0']
-1165['CpAddr:', '251723782']
-1164['Response', 'sent', 'with', 'status', '1']
+794['Request', 'received', 'from', 'cpId', '0']
+794['Response', 'sent', 'with', 'status', '0']

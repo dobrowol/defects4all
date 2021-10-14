@@ -1,2 +1,2 @@
-616['MODIFY', 'ncoFrequency:11000']
-617['dfeChannelId=1,', 'ncoFrequency[Hz]=11000']
+498['MODIFY', 'ncoFrequency:11000']
+500['hwInstanceId=0,', 'dfeChannelId=1,', 'LTE,', '20000000,', '0,', '0),', 'ncoFrequencyInHz[Hz]=11000,', 'dlGsmCarrierId=15']

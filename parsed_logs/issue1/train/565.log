@@ -1,2 +1,6 @@
 61['TX', 'carrier1', 'antenna39a']
-615['PalauLo']
+61['TX', 'carrier2', 'antenna39a']
+61['RX', 'carrier1', 'antenna39a']
+61['RX', 'carrier2', 'antenna39a']
+497['PalauLo']
+497['PalauLo']

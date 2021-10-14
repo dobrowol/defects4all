@@ -1,5 +1,2 @@
-373['pdrxOffsetDB=0.000000dB', 'gPwrConfig=0.000000dB']
-374['0cdBm,', '0.00V,', '0.00V,', '0,', '0,', '0']
-375['rfdirty::interface::messages::SetConfigurationReq', '38102)', 'dirtyrfservice::', '30000ms)']
-376['38103', '30000']
-383['38103', '38103,']
+255['pdrxOffsetDB=0.000000dB', 'gPwrConfig=-7601987584.000000dB']
+256['6cdBm,', '0.00V,', '0.00V,', '0,', '0,', '2']

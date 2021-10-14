@@ -1,2 +1,3 @@
-167['CREATE']
-167['MODIFY']
+257['draco::interface::message::RficHwStateSubscribeReq', '3105)', 'dracort::', '30000ms)']
+258['3106', '30000']
+259['draco::interface::message::RficHwStateSubscribeResp', '3106)', 'dracort::']

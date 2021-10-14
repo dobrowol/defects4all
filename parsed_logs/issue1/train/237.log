@@ -1,1 +1,3 @@
-475[]
+358['downlinkOffset(1000)', 'port(1)']
+359['DownlinkOffsetPrimary:950,', 'offsetSec:1000', 'refPort:1', 'primaryPort:0', 'fiberDelta:50']
+360['TddSetOffsetConfig::downlinkOffset:135']

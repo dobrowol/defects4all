@@ -1,2 +1,2 @@
-1012['paPsuId=[0]']
-1012['paPsuId=[0]']
+642['ADD', 'paPsuId=[0],', 'paPsuOutputId=[1],', 'state=enabled']
+642['ADD', 'paPsuId=[0],', 'paPsuOutputId=[1],', 'state=enabled']
