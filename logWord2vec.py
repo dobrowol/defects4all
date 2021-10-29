@@ -82,12 +82,17 @@ with open(ut_log) as f:
   kms, kmers_vocab, kmers_in_line = kmers.createKmers(f.read().splitlines(), 3)
 for line in kms[:20]:
   print(line)
-#out_kl = io.open('klogs.tsv', 'w', encoding='utf-8')
+#out_kl = io.open('klogs_raw.tsv', 'w', encoding='utf-8')
 #with open(labels) as f:
 #    lines = f.read().splitlines()
 #i=0
-#for klog in kms:
-#    out_kl.write(lines[i] + " " + klog + "\n")
+max_sentnce_length = 0
+for klog in kms:
+    splitted = klog.split()
+    if splitted > max_sentnce_length:
+        max_sentnce_length = splitted
+
+#    out_kl.write(klog + "\n")
 #    i+=1
 #out_kl.close()
 kmers_ds = tf.data.Dataset.from_tensor_slices(kms)
@@ -100,7 +105,7 @@ vectorize_layer = layers.TextVectorization(
     standardize=None,
     max_tokens=vocab_size,
     output_mode='int',
-    output_sequence_length=sequence_length)
+    output_sequence_length=max_sentnce_length)
 vectorize_layer.adapt(kmers_ds.batch(1024))
 inverse_vocab = vectorize_layer.get_vocabulary()
 print(inverse_vocab[:20])

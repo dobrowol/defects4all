@@ -71,6 +71,9 @@ with open(test_file) as sequence_file:
     sequence = sequence_file.readline()
     similarities = find_similar_sequences(sequence)
 
+from data_presentation.lcs_python_presentation import similarity_presentation
 
-for similar_sequence in sorted(similarities.items()):
-    print (similar_sequence)
+similarity_presentation(similarities)
+
+#for similar_sequence in sorted(similarities.items()):
+#    print (similar_sequence)
