@@ -22,9 +22,9 @@ OVERLAP_KLOG=True
 #     help="klog size")
 
 #args = parser.parse_args()
-LOG_FILE = "../results/issue4/1runtime_DEFAULT.log"
-DRAIN_FILE = "../results/issue4/1runtime_DEFAULT.drain"
-PREDICTIONS_FILE="../results/issue4/predictions"
+LOG_FILE = "./results/issue4/1runtime_DEFAULT.log"
+DRAIN_FILE = "./results/issue4/1runtime_DEFAULT.drain"
+PREDICTIONS_FILE="./results/issue4/predictions"
 
 with open(LOG_FILE, errors='replace') as f:
     log_lines = f.read().splitlines()
@@ -63,7 +63,7 @@ def similarity_presentation(similarities, log_file=LOG_FILE, drain_file=DRAIN_FI
         for j in range(len(parsed_lines)):
             if j in similarities:
                 for i in range(similarities[j][0][2].size):
-                    o_f.write(log_lines[parsed_lines[j+i]]+"\t"+similarities[j][0][0]+"\t"+similarities[j][0][1]+"\n")
-            o_f.write(log_lines[parsed_lines[j]]+"\n")
+                    o_f.write(log_lines[parsed_lines[j+i]]+"\t"+str(similarities[j][0][0])+"\t"+str(similarities[j][0][1])+"\n")
+            o_f.write(log_lines[parsed_lines[j]]+"\t \t \n")
             j+=1
 
