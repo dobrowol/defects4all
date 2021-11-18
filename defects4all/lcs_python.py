@@ -11,7 +11,13 @@ parser.add_argument("issue", type=str,
 
 args = parser.parse_args()
 issue = args.issue
-train_directory = "./parsed_logs/"+issue
+print(os.environ['PYTHONPATH'])
+print(os.environ)
+PARSED_LOGS=os.getenv('PARSED_LOGS_DIR')
+if PARSED_LOGS is None:
+    print ("Environment var PARSED_LOGS_DIR not set!!!")
+    exit() 
+train_directory = PARSED_LOGS+"/"+issue
 test_directory = train_directory +"/life"
 vec_train_dir = train_directory + "/sequence"
 test_file = test_directory+"/sequence/ut_log_as_sentence.vec"

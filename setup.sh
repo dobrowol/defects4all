@@ -1,8 +1,12 @@
+CONFIG_FILE="defects4all.ini"
 if [[ -z "${DEFECTS4ALL_ENV}" ]]; then
     DEFECTS4ALL_ENV=`pwd`
 fi
-if [[ -z "${PARSED_LOGS_ENV}" ]]; then
-    PARSED_LOGS_ENV="$DEFECTS4ALL_ENV/parsed_logs"
+if [[ -z "${PARSED_LOGS_DIR}" ]]; then
+    echo "PARSED_LOGS_DIR=$DEFECTS4ALL_ENV/parsed_logs" >> $CONFIG_FILE
+fi
+if [[ -z "${RESULT_DIR}" ]]; then
+    echo "RESULT_DIR=$DEFECTS4ALL_ENV/result" >>$CONFIG_FILE
 fi
 if [[ -z "${FASTTEXT_ENV}" ]]; then
     if [[ ! -d fastText-0.9.2 ]]; then
@@ -14,8 +18,7 @@ if [[ -z "${FASTTEXT_ENV}" ]]; then
 	    cd fastText-0.9.2
     fi 
     echo `pwd`
-    export FASTTEXT_ENV=`pwd`
-    echo "FASTTEXT_ENV $FASTTEXT_ENV"
+    echo "FASTTEXT_ENV=$FASTTEXT_ENV">>$CONFIG_FILE
     cd ..
 fi
 shopt -s nocasematch

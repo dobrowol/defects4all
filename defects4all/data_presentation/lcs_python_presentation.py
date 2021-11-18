@@ -25,11 +25,13 @@ OVERLAP_KLOG=True
 LOG_FILE = "/runtime_DEFAULT.log"
 DRAIN_FILE = "/runtime_DEFAULT.drain"
 OUT_FILE="/LCS_prediction_presentation_"
+PARSED_LOGS=os.getenv('PARSED_LOGS_DIR')
+RESULT=os.getenv('RESULT_DIR')
 
 def similarity_presentation(issue, sequence_id, similarities):
-    log_file = "./parsed_logs/"+issue+"/life/"+sequence_id+".log"
-    drain_file = "./parsed_logs/"+issue+"/life/"+sequence_id+".drain"
-    out_dir = "./result/"+issue
+    log_file = PARSED_LOGS+"/"+issue+"/life/"+sequence_id+".log"
+    drain_file = PARSED_LOGS+"/parsed_logs/"+issue+"/life/"+sequence_id+".drain"
+    out_dir = RESULT+"/"+issue
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
     out_file = out_dir + OUT_FILE+sequence_id + ".csv"
