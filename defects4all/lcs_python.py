@@ -1,7 +1,8 @@
 import os
 import argparse
-import createFastTextTrainSet
 import sys
+from defects4all.createFastTextTrainSet import create_fasttext_sequence_representation
+from defects4all.find_all_similar_blocks import find_all_similar_blocks
 
 parser = argparse.ArgumentParser(
     description='fastText helper tool to reduce model dimensions.')
@@ -17,20 +18,20 @@ test_file = test_directory+"/sequence/ut_log_as_sentence.vec"
 filename = vec_train_dir + "/" + "ut_log_as_sentence.vec"
 
 if not os.path.isfile(filename):
-    train_log_sequence_file = createFastTextTrainSet.create_fasttext_sequence_representation(train_directory)
+    train_log_sequence_file = create_fasttext_sequence_representation(train_directory)
 if not os.path.isfile(test_file):
-    test_log_sequence_file = createFastTextTrainSet.create_fasttext_sequence_representation(test_directory)
+    test_log_sequence_file = create_fasttext_sequence_representation(test_directory)
 
 similarities = {}
 
 filename = vec_train_dir + "/" + "ut_log_as_sentence.vec"
 with open(filename) as subsequences_file:
     subsequences = subsequences_file.readlines()
-from data_presentation.lcs_python_presentation import similarity_presentation
+from defects4all.data_presentation.lcs_python_presentation import similarity_presentation
 with open(test_file) as sequence_file:
     sequences = sequence_file.readlines()
 for sequence in sequences:
-    similarities = find_similar_sequences(sequence, subsequences)
+    similarities = find_all_similar_blocks(sequence, subsequences)
 
     sequence_id = ((sequence.split()[0]).split("__label__")[1]).split('.')[0]
 

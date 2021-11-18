@@ -95,5 +95,10 @@ for filename in os.listdir(vec_test_dir):
                 #print (line_nbr)
 
 
-for similar_sequence in similarities.items():
-    print (similar_sequence)
+out_dir = "./results/issue4/"
+out_file = "lcs_similarities_sequence.txt"
+if not os.isdir(out_dir):
+    os.mkdir(out_dir)
+with open(out_dir+out_file, "w+") as f:
+    for similar_sequence in similarities.items():
+        f.write(similar_sequence+"\n")

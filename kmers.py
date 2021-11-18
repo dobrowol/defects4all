@@ -37,17 +37,22 @@ def createKmersAndStuff(sequences, kmer_size):
     return kmers, kmer_vocab, kmers_in_line
 
 
-def createKmersFromSequence(sequence, kmer_size):
+def createKmersFromSequence(sequence, kmer_size, klog_overlap):
     tokens = sequence.split(' ')
     kmer = ""
     if len(tokens) - kmer_size <= 0:
         for token in tokens:
             kmer += token+"t"
 
-    for i in range(len(tokens) - kmer_size):
+    i = 0
+    while i <len(tokens) - kmer_size:
         k = ""
         for j in range(kmer_size):
             k += tokens[i+j]+"t"
+        if klog_overlap:
+            i += 1
+        else:
+            i += kmer_size
         kmer += k + ' '
     return kmer
 
