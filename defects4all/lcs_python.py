@@ -2,20 +2,22 @@ import os
 import argparse
 import sys
 from defects4all.createFastTextTrainSet import create_fasttext_sequence_representation
-from defects4all.find_all_similar_blocks import find_all_similar_blocks
+from defects4all.find_all_similar_blocks import find_all_similar_blocks2
+import configparser
 
 parser = argparse.ArgumentParser(
     description='fastText helper tool to reduce model dimensions.')
 parser.add_argument("issue", type=str,
     help="issue to be processed")
-
 args = parser.parse_args()
 issue = args.issue
-print(os.environ['PYTHONPATH'])
-print(os.environ)
-PARSED_LOGS=os.getenv('PARSED_LOGS_DIR')
+
+config = configparser.ConfigParser()
+config.sections()
+config.read('defects4all.ini')
+PARSED_LOGS=config['DEFAULT']['PARSED_LOGS_DIR']
 if PARSED_LOGS is None:
-    print ("Environment var PARSED_LOGS_DIR not set!!!")
+    print ("Wrong configuration PARSED_LOGS_DIR not set!!!")
     exit() 
 train_directory = PARSED_LOGS+"/"+issue
 test_directory = train_directory +"/life"
@@ -37,7 +39,7 @@ from defects4all.data_presentation.lcs_python_presentation import similarity_pre
 with open(test_file) as sequence_file:
     sequences = sequence_file.readlines()
 for sequence in sequences:
-    similarities = find_all_similar_blocks(sequence, subsequences)
+    similarities = find_all_similar_blocks2(sequence, subsequences)
 
     sequence_id = ((sequence.split()[0]).split("__label__")[1]).split('.')[0]
 
