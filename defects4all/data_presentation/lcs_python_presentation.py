@@ -1,5 +1,6 @@
 import os
 import argparse
+import configparser
 
 KLOG_SIZE=3
 SENTENCE_LEN=10
@@ -25,12 +26,22 @@ OVERLAP_KLOG=True
 LOG_FILE = "/runtime_DEFAULT.log"
 DRAIN_FILE = "/runtime_DEFAULT.drain"
 OUT_FILE="/LCS_prediction_presentation_"
-PARSED_LOGS=os.getenv('PARSED_LOGS_DIR')
-RESULT=os.getenv('RESULT_DIR')
+config = configparser.ConfigParser()
+config.sections()
+config.read('defects4all.ini')
+PARSED_LOGS=config['DEFAULT']['PARSED_LOGS_DIR']
+RESULT=config['DEFAULT']['RESULT_DIR']
+if PARSED_LOGS is None:
+    print ("Wrong configuration PARSED_LOGS_DIR not set!!!")
+    exit()
+if RESULT is None:
+    print ("Wrong configuration RESULT_DIR not set!!!")
+    exit()
+
 
 def similarity_presentation(issue, sequence_id, similarities):
     log_file = PARSED_LOGS+"/"+issue+"/life/"+sequence_id+".log"
-    drain_file = PARSED_LOGS+"/parsed_logs/"+issue+"/life/"+sequence_id+".drain"
+    drain_file = PARSED_LOGS+"/"+issue+"/life/"+sequence_id+".drain"
     out_dir = RESULT+"/"+issue
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
@@ -53,8 +64,8 @@ def similarity_presentation(issue, sequence_id, similarities):
         for j in range(len(log_lines)):
             if j in parsed_lines:
                 if j in similarities:
-                    for i in range(similarities[j][0][2].size):
-                        o_f.write(log_lines[j+i]+"\t"+str(similarities[j][0][0])+"\t"+str(similarities[j][0][1])+"\n")
+                    for i in range(j, similarities[j][1]):
+                        o_f.write(log_lines[j+i]+"\t"+str(similarities[j][0])+"\t"+str(similarities[j][1]-j)+"\n")
                 else:
                     o_f.write(log_lines[j] + "\t \t \n")
             else:

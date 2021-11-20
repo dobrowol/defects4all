@@ -40,7 +40,6 @@ with open(test_file) as sequence_file:
     sequences = sequence_file.readlines()
 for sequence in sequences:
     similarities = find_all_similar_blocks2(sequence, subsequences)
-
     sequence_id = ((sequence.split()[0]).split("__label__")[1]).split('.')[0]
 
     similarity_presentation(issue, sequence_id, similarities)

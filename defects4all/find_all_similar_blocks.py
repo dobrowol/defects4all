@@ -14,13 +14,16 @@ def find_all_similar_blocks2(sequence, subsequences):
         split_seq = sequence.split()
         for i in tqdm(range((len(subs_list)))):
             start = None
+            k=i
             for j in range(len(split_seq)):
-                if split_seq[j]==subs_list[i]:
+                if split_seq[j]==subs_list[k]:
+                    k+=1;
                     if start is None:
                         start = j
                 elif start is not None:
                     index_matches[start]=j-1
                     start = None
+                    k=i
         for ind in index_matches:
             if ind in similar_block_at_line:
                 if similar_block_at_line[ind][1]<index_matches[ind]:
