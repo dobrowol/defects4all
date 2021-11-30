@@ -61,7 +61,8 @@ def similarity_presentation(issue, sequence_id, similarities):
                 parsed_lines.append(all_line_idx)
             all_line_idx += 1
         j = 0
-        for j in range(len(log_lines)):
+        from tqdm import tqdm
+        for j in tqdm(range(len(log_lines))):
             if j in parsed_lines:
                 if j in similarities:
                     for i in range(j, similarities[j][1]):
