@@ -1,59 +1,67 @@
 import os
 import argparse 
+import glob
+from defects4all.utils import get_runtime_file_name_from_klog_file
 
 KLOG_SIZE=3
 SENTENCE_LEN=10
 OVERLAP_SENTENCE=False
 OVERLAP_KLOG=True
 
-
 parser = argparse.ArgumentParser(
     description='helper tool to build k-logs from log sequence')
-parser.add_argument("file", type=str,
-    help="normalized log file")
-parser.add_argument("drain_file", type=str,
-    help="drained log file")
-parser.add_argument("prediction_file", type=str,
-    help="file with predictions")
-parser.add_argument("--non_overlap","-n", action='store_true',
-    help="non overlapping sequences")
-parser.add_argument("--klog_size","-k", type=int,
-    help="klog size")
-parser.add_argument("--sentence_length", "-s", type=int,
-    help="klog size")
+parser.add_argument("issue", type=str,
+    help="issue name")
+
+config = configparser.ConfigParser()
+config.sections()
+config.read('defects4all.ini')
+PARSED_LOGS=config['DEFAULT']['PARSED_LOGS_DIR']
+KLOGS_DIR=config['DEFAULT']['KLOGS_DIR']
+KLOG_MIN_SIZE = int(config['DEFAULT']['KLOG_MIN_SIZE'])
+KLOG_MAX_SIZE = int(config['DEFAULT']['KLOG_MAX_SIZE'])
+SENTENCE_MIN_SIZE = int(config['DEFAULT']['SENTENCE_MIN_SIZE'])
+SENTENCE_MAX_SIZE = int(config['DEFAULT']['SENTENCE_MAX_SIZE'])
 
 args = parser.parse_args()
 
-with open(args.file, errors='replace') as f:
-    log_lines = f.read().splitlines()
-with open(args.prediction_file, errors='replace') as p:
-    predictions_lines = p.read().splitlines()
+in_klogs_dir = KLOGS_DIR+"/"+args.issue
+in_klogs_life_dir = KLOGS_DIR+"/"+args.issue+"/life"
+in_log_dir = PARSED_LOGS+"/"+args.issue
+in_log_life_dir = PARSED_LOGS+"/"+args.issue+"/life"
 
-with open(args.drain_file, errors='replace') as f:
-    drain_lines = f.read().splitlines()
+for klog_size in range(KLOG_MIN_SIZE, KLOG_MAX_SIZE):
+    for sentence_size in range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE):
+        ind_dir = in_klogs_life_dir +"/klog"+str(klog_size)+"/sentence"+str(sentence_size)
+        for prediction_file in glob.glob(ind_dir+"/*.pred"):
+            runtime_name = get_runtime_file_name_from_klog_file(klog_test_file)
+            runtime_drain_file = glob.glob(in_log_life_dir+"/%s.drain"%(runtime_name))[0]
+            runtime_log_file = glob.glob(in_log_life_dir+"/%s.log"%(runtime_name))[0]
 
-out_dir = os.path.dirname(args.file)
-out_file = out_dir + "/prediction_presentation.csv"
+            with open(runtime_log_file, errors='replace') as f:
+                log_lines = f.read().splitlines()
+            with open(prediction_file, errors='replace') as p:
+                predictions_lines = p.read().splitlines()
 
-if OVERLAP_KLOG :
-    logs_per_prediction = SENTENCE_LEN + KLOG_SIZE - 1
-else  :
-    logs_per_prediction = SENTENCE_LEN * KLOG_SIZE 
+            with open(runtime_drain_file, errors='replace') as f:
+                drain_lines = f.read().splitlines()
 
-if OVERLAP_SENTENCE:
-    log_step = KLOG_SIZE
-else:
-    log_step = logs_per_prediction
+            out_dir = in_klogs_life_dir
+            out_file = out_dir + "/prediction_presentation.csv"
+            
+            logs_per_prediction = SENTENCE_LEN * KLOG_SIZE 
+
+            log_step = logs_per_prediction
     
-print("writing to file ", out_file)
-with open(out_file, "a") as o_f:
-    i = 0
-    while j < len(drain_lines):
-    for j in range(len(drain_lines)):
-        if not j.startswith("None"):
-            o_f.write(log_lines[j]+"\t"+prediction_lines[i%logs_per_prediction])
-            i += 1
-        else:
-            o_f.write(log_lines[j]+"\n")
+            print("writing to file ", out_file)
+            with open(out_file, "a") as o_f:
+                i = 0
+                while j < len(drain_lines):
+                for j in range(len(drain_lines)):
+                    if not j.startswith("None"):
+                        o_f.write(log_lines[j]+"\t"+prediction_lines[i%logs_per_prediction])
+                        i += 1
+                    else:
+                        o_f.write(log_lines[j]+"\n")
         
 

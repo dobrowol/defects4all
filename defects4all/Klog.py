@@ -6,23 +6,23 @@ class Klog:
         self.sentence_overlap=sentence_overlap
 
     def createKlogsFromSequence(self, sequence):
-        tokens = sequence.split(' ')
-        kmer = ""
-        if len(tokens) - self.klog_size <= 0:
-            for token in tokens:
-                kmer += token+"t"
+        klog = ""
+        if len(sequence) - self.klog_size <= 0:
+            for token in sequence:
+                klog += token+"t"
     
-        i = 1
-        while i <len(tokens) - self.klog_size:
+        increment = 1
+        if not self.klog_overlap:
+            increment = self.klog_size
+
+        i = 0 
+        while i <=len(sequence) - self.klog_size:
             k = ""
             for j in range(self.klog_size):
-                k += tokens[i+j]+"t"
-            if self.klog_overlap:
-                i += 1
-            else:
-                i += self.klog_size
-            kmer += k + ' '
-        return kmer
+                k += sequence[i+j]+"t"
+            klog += k + ' '
+            i += increment
+        return klog.rstrip()
     
     def prepare_klog_file(self, train, in_file, out_dir):
         if self.klog_overlap:
@@ -35,27 +35,45 @@ class Klog:
         else:
             so = "sentence_nooverlap"
     
-        out_file = out_dir + "/"+ko + "_" + so+".klog"
+        out_file = out_dir + "/"+ko + "_" + so
         with open(in_file) as f:
             lines = f.read().splitlines()
             i = 0
             klogs = {}
             for line in lines:
-                klogs[line.split()[0]] = self.createKlogsFromSequence(line)
-            with open(out_file, 'a') as out_f:
-                for label,klog in klogs.items():
-                    klog_split = klog.split()
-                    i = 0
-                    while i < len(klog_split) - self.sentence_size:
-                        if train:
-                            out_f.write(label +" ")
-                            print("write label ", label)
-                        for j in range(i,i+self.sentence_size):
-                            out_f.write(klog_split[j] +" ")
-                        out_f.write("\n")
-                        if self.sentence_overlap:
-                            i += 1
-                        else:
-                            i += self.sentence_size
-        print ("created ", out_file)
-        return out_file
+                klogs[line.split()[0]] = self.createKlogsFromSequence(line.split()[1:])
+            if self.sentence_size == 0:
+                return self.print_klogs(out_file, klogs)
+            else:
+                return self.print_sentences_of_klogs(out_file, klogs, train)
+    
+    def print_klogs(self, out_file, klogs):
+        out_file = out_file+".klog"
+        with open(out_file, 'w') as out_f:
+            for label,klog in klogs.items():
+                out_f.write(label +" ")
+                for k in klog.split(): 
+                    out_f.write(k+" ")
+                out_f.write("\n")
+        return [out_file]
+    
+    def print_sentences_of_klogs(self, out_file, klogs, train):
+        out_files = []
+        for label,klog in klogs.items():
+            label_wo_label = label.split("__label__")[1]
+            res_file = out_file+"_"+label_wo_label+".klog"
+            out_files.append(res_file)
+            with open(out_file+"_"+label_wo_label+".klog", 'w') as out_f:
+                i = 0
+                klog_split = klog.split()
+                while i < len(klog_split)-self.sentence_size:
+                    if train:
+                        out_f.write(label + " ")
+                    for j in range(i,i+self.sentence_size):
+                        out_f.write(klog_split[j] +" ")
+                    out_f.write("\n")
+                    if self.sentence_overlap:
+                        i += 1
+                    else:
+                        i += self.sentence_size
+        return out_files

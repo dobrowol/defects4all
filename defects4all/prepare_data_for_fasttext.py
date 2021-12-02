@@ -4,7 +4,6 @@ import os
 from Drain3.drain_RF_train import parsing_file
 from Drain3.drain_RF_infer import infering_file
 
-print("DUPA")
 parser = argparse.ArgumentParser(
     description='defects4All helper tool to parse raw logs to clusters sequence applicable for forstText.')
 parser.add_argument("train_dir", type=str,
