@@ -1,7 +1,6 @@
 import os
 import argparse
 import sys
-from defects4all.createFastTextTrainSet import create_fasttext_sequence_representation
 from defects4all.find_all_similar_blocks import find_all_similar_blocks2
 import configparser
 
@@ -26,9 +25,11 @@ test_file = test_directory+"/sequence/ut_log_as_sentence.vec"
 filename = vec_train_dir + "/" + "ut_log_as_sentence.vec"
 
 if not os.path.isfile(filename):
-    train_log_sequence_file = create_fasttext_sequence_representation(train_directory)
+    print("File with UT sequences not ready %s"%(filename))
+    exit()
 if not os.path.isfile(test_file):
-    test_log_sequence_file = create_fasttext_sequence_representation(test_directory)
+    print("File with runtime sequences not ready %s"%(test_file))
+    exit()
 
 similarities = {}
 

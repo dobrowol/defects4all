@@ -4,6 +4,7 @@ import argparse
 import os
 import glob
 import subprocess
+import configparser
 
 parser = argparse.ArgumentParser(
     description='defects4All helper tool to drain parsed logs to clusters sequence applicable for forstText.')
@@ -12,6 +13,11 @@ parser.add_argument("issue", type=str,
 
 args = parser.parse_args()
 issue = args.issue
+
+config = configparser.ConfigParser()
+config.sections()
+config.read('defects4all.ini')
+LEVEL=config['DEFAULT']['LEVEL']
 
 dest_train_path = "../parsed_logs/"+issue+"/"
 dest_test_path = dest_train_path + "/life/"
@@ -40,6 +46,6 @@ subprocess.call("rm -rf %sresult" %dest_test_path, shell=True)
 import createFastTextTestSet
 import createFastTextTrainSet
 
-createFastTextTrainSet.create_fasttext_sequence_representation(dest_train_path)
+createFastTextTrainSet.create_fasttext_sequence_representation(dest_train_path, LEVEL)
 for f in  glob.glob(dest_test_path+"/*.drain"):
     createFastTextTestSet.create_fasttext_sequence_representation(f)

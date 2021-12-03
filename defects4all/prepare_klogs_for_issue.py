@@ -1,6 +1,5 @@
 import os
 import argparse 
-from defects4all.createFastTextTrainSet import create_fasttext_sequence_representation
 import configparser
 from defects4all.Klog import Klog
 
@@ -36,8 +35,6 @@ out_life_dir = KLOGS_DIR+"/"+args.issue+"/life"
 klog_overlaps = [True, False]
 sentence_overlaps = [True, False]
 
-train_log_sequence_file = create_fasttext_sequence_representation(in_dir)
-test_log_sequence_file = create_fasttext_sequence_representation(in_life_dir)
 from tqdm import tqdm
 for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE)):
     train = True

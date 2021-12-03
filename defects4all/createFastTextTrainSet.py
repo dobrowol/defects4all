@@ -21,11 +21,17 @@ def create_raw_vector_representation(dir):
                         f.write(item + " ")
                 f.write("\n")
 
+def getFileName(filename, level):
+    if level == "TestSuite":
+        return (filename.split(".")[0]).split('_')[0]
+    else:
+         return filename.split(".")[0]
 
-def create_fasttext_sequence_representation(directory):
+def create_fasttext_sequence_representation(directory,level):
     print("create_fasttext_sequence_representation")
     out_dir = directory + "/sequence"
     vec_path = out_dir +"/ut_log_as_sentence.vec"
+    out_file =  open(vec_path, "w")
     for filename in os.listdir(directory):
         vec_lines = []
         i=0
@@ -40,13 +46,13 @@ def create_fasttext_sequence_representation(directory):
                 i = i + 1
             if not os.path.exists(out_dir):
                 os.mkdir(out_dir)
-            label = "__label__" + filename.split(".")[0]
-            with open(vec_path, "a+") as f:
-                f.write(label + " ")
-                for item in vec_lines:
-                    if item != "None":
-                        f.write(item + " ")
-                f.write("\n")
+            label = "__label__" + getFileName(filename,level)
+            out_file.write(label + " ")
+            for item in vec_lines:
+                if item != "None":
+                    out_file.write(item + " ")
+            out_file.write("\n")
+    out_file.close()
     return vec_path
 
 
