@@ -40,8 +40,8 @@ if RESULT is None:
 
 
 def similarity_presentation(issue, sequence_id, similarities):
-    log_file = PARSED_LOGS+"/"+issue+"/life/"+sequence_id+".log"
-    drain_file = PARSED_LOGS+"/"+issue+"/life/"+sequence_id+".drain"
+    log_file = PARSED_LOGS+"/"+issue+"/runtime/"+sequence_id+".log"
+    drain_file = PARSED_LOGS+"/"+issue+"/runtime/"+sequence_id+".drain"
     out_dir = RESULT+"/"+issue
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)

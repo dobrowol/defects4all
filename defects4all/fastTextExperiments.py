@@ -23,7 +23,7 @@ args = parser.parse_args()
 
 
 in_dir = KLOGS_DIR+"/"+args.issue
-in_life_dir = KLOGS_DIR+"/"+args.issue+"/life"
+in_runtime_dir = KLOGS_DIR+"/"+args.issue+"/runtime"
 kos = ["klog_overlap", "klog_nooverlap"]
 sos = ["sentence_overlap", "sentence_nooverlap"]
 from tqdm import tqdm
@@ -31,6 +31,6 @@ for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE)):
     fastTextTrainer = FastTextTrainer(FASTTEXT_DIR, in_dir, klog_size)
     model_file = fastTextTrainer.train()
         for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE)):
-            fastTextPredictor = FastTextPreidctor(FASTTEXT_DIR, in_life_dir, klog_size, sentence_size, model_file)
+            fastTextPredictor = FastTextPreidctor(FASTTEXT_DIR, in_runtime_dir, klog_size, sentence_size, model_file)
             fastTextPredictor.predict()
         

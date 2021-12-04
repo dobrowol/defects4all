@@ -33,20 +33,20 @@ SENTENCE_MAX_SIZE = int(config['DEFAULT']['SENTENCE_MAX_SIZE'])
 args = parser.parse_args()
 
 in_klogs_dir = KLOGS_DIR+"/"+args.issue
-in_klogs_life_dir = KLOGS_DIR+"/"+args.issue+"/life"
+in_klogs_runtime_dir = KLOGS_DIR+"/"+args.issue+"/runtime"
 in_log_dir = PARSED_LOGS+"/"+args.issue
-in_log_life_dir = PARSED_LOGS+"/"+args.issue+"/life"
+in_log_runtime_dir = PARSED_LOGS+"/"+args.issue+"/runtime"
 
 for klog_size in range(KLOG_MIN_SIZE, KLOG_MAX_SIZE):
     for sentence_size in range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE):
-        print(in_klogs_life_dir +"/klog"+str(klog_size)+"/sentence"+str(sentence_size))
-        ind_dir = in_klogs_life_dir +"/klog"+str(klog_size)+"/sentence"+str(sentence_size)
+        print(in_klogs_runtime_dir +"/klog"+str(klog_size)+"/sentence"+str(sentence_size))
+        ind_dir = in_klogs_runtime_dir +"/klog"+str(klog_size)+"/sentence"+str(sentence_size)
         for prediction_file in glob.glob(ind_dir+"/*.pred"):
             print(prediction_file)
             runtime_name = get_runtime_filename(prediction_file)
-            print(in_log_life_dir+"/%s.drain"%(runtime_name))
-            runtime_drain_file = glob.glob(in_log_life_dir+"/%s.drain"%(runtime_name))[0]
-            runtime_log_file = glob.glob(in_log_life_dir+"/%s.log"%(runtime_name))[0]
+            print(in_log_runtime_dir+"/%s.drain"%(runtime_name))
+            runtime_drain_file = glob.glob(in_log_runtime_dir+"/%s.drain"%(runtime_name))[0]
+            runtime_log_file = glob.glob(in_log_runtime_dir+"/%s.log"%(runtime_name))[0]
 
             with open(runtime_log_file, errors='replace') as f:
                 log_lines = f.read().splitlines()

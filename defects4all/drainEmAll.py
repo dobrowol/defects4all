@@ -20,7 +20,7 @@ config.read('defects4all.ini')
 LEVEL=config['DEFAULT']['LEVEL']
 
 dest_train_path = "../parsed_logs/"+issue+"/"
-dest_test_path = dest_train_path + "/life/"
+dest_test_path = dest_train_path + "/runtime/"
 
 persistent_dir = issue
 if not os.path.isdir(persistent_dir):

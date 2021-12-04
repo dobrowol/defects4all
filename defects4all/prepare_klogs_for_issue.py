@@ -23,31 +23,25 @@ KLOG_MAX_SIZE = int(config['DEFAULT']['KLOG_MAX_SIZE'])
 SENTENCE_MIN_SIZE = int(config['DEFAULT']['SENTENCE_MIN_SIZE'])
 SENTENCE_MAX_SIZE = int(config['DEFAULT']['SENTENCE_MAX_SIZE'])
 
-if PARSED_LOGS is None:
-    print ("Wrong configuration PARSED_LOGS_DIR not set!!!")
-    exit() 
 in_dir = PARSED_LOGS+"/"+args.issue
-in_life_dir = PARSED_LOGS+"/"+args.issue+"/life"
+in_runtime_dir = PARSED_LOGS+"/"+args.issue+"/runtime"
 training = True
 out_dir = KLOGS_DIR+"/"+args.issue
-out_life_dir = KLOGS_DIR+"/"+args.issue+"/life"
+out_runtime_dir = KLOGS_DIR+"/"+args.issue+"/runtime"
 
 klog_overlaps = [True, False]
 sentence_overlaps = [True, False]
 
 from tqdm import tqdm
+train_log_sequence_file=in_dir+"/ut_log_as_sequence.vec"
+test_log_sequence_file=in_runtime_dir+"/ut_log_as_sequence.vec"
+training_klog = Klog(train_log_sequence_file, out_dir)
+testing_klog = Klog(test_log_sequence_file, out_runtime_dir)
 for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE)):
-    train = True
-    klog = Klog(klog_size, True)
-    specific_out_dir = out_dir +"/klog"+str(klog_size)
-    os.makedirs(specific_out_dir, exist_ok=True)
-    klog.prepare_klog_file(train, train_log_sequence_file, specific_out_dir)
+    phase = "training"
+    training_klog.klog.prepare_training_klog(phase, klog_size, 0, True, False)
 
     for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE)):
-        specific_out_life_dir = out_life_dir +"/klog"+str(klog_size)+"/sentence"+str(sentence_size)
-        os.makedirs(specific_out_life_dir, exist_ok=True)
-        klog2 = Klog(klog_size, True, sentence_size, False)
-        train = False
-        klog2.prepare_klog_file(train, test_log_sequence_file, specific_out_life_dir)
+        testing_klog.prepare_klog_file("testing", klog_size, sentence_size, True, False)
         
 

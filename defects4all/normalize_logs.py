@@ -18,14 +18,14 @@ if args.test_type == "UT":
 else:
     folder = "/MTLogs"
 train_dir = "/var/wodobrow/logs" + folder + "/" + issue 
-test_dir = train_dir + "/life"
+test_dir = train_dir + "/runtime"
 if not os.path.isdir(train_dir+"/normalized"):
     subprocess.call("./normalize.sh %s"% train_dir, shell=True)
 if not os.path.isdir(test_dir+"/normalized"):
-    subprocess.call("./normalize.sh %s life"% test_dir, shell=True)
+    subprocess.call("./normalize.sh %s runtime"% test_dir, shell=True)
 
 dest_train_path = "./parsed_logs/"+issue+args.test_type
-dest_test_path = dest_train_path + "/life/"
+dest_test_path = dest_train_path + "/runtime/"
 if not os.path.isdir(dest_train_path):
     print("create train dir ", dest_train_path)
     os.mkdir(dest_train_path)

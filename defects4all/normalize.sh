@@ -1,7 +1,7 @@
 #!/bin/bash
 columns=4
 if [ "$#" -eq 0 ]; then
-	echo "usage normalized.sh <dir_name> [optional]<life>"
+	echo "usage normalized.sh <dir_name> [optional]<runtime>"
 fi
 if [ "$#" -eq 2 ]; then
 	

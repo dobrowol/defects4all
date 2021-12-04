@@ -19,7 +19,7 @@ if PARSED_LOGS is None:
     print ("Wrong configuration PARSED_LOGS_DIR not set!!!")
     exit() 
 train_directory = PARSED_LOGS+"/"+issue
-test_directory = train_directory +"/life"
+test_directory = train_directory +"/runtime"
 vec_train_dir = train_directory + "/sequence"
 test_file = test_directory+"/sequence/ut_log_as_sentence.vec"
 filename = vec_train_dir + "/" + "ut_log_as_sentence.vec"
