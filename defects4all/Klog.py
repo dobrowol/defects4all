@@ -5,6 +5,30 @@ class Klog:
         self.in_file=in_file
         self.out_dir=out_dir
 
+    def prepare_klog_file(self, phase, klog_size, sentence_size, klog_overlap, sentence_overlap):
+        self.klog_size = klog_size
+        self.klog_overlap = klog_overlap
+        self.sentence_increment = self._get_sentence_increment(sentence_overlap, sentence_size)
+        self.sentence_size = sentence_size
+        current_out_dir = self._get_out_dir(self.out_dir, klog_size, sentence_size)
+        self.line_creator = self._get_line_creator(phase, sentence_size)
+        self.out_file_prefix =  self._get_out_file_prefix(current_out_dir, klog_overlap, sentence_overlap)
+        self.out_filename_constructor = self._get_out_filename_constructor(phase)
+        klogs_printer = self._get_klogs_printer(sentence_size)
+        with open(self.in_file) as f:
+            lines = f.read().splitlines()
+            i = 0
+            klogs = {}
+            for line in lines:
+                klogs[line.split()[0]] = self._createKlogsFromSequence(line.split()[1:])
+        return klogs_printer(self.out_file_prefix, klogs)
+    
+    def _get_sentence_increment(self, sentence_overlap, sentence_size):
+        if sentence_overlap:
+            return 1
+        else:
+            return sentence_size
+
     def _createKlogsFromSequence(self, sequence):
         klog = ""
         if len(sequence) - self.klog_size <= 0:
@@ -24,23 +48,7 @@ class Klog:
             i += increment
         return klog.rstrip()
     
-    def prepare_klog_file(self, phase, klog_size, sentence_size, klog_overlap, sentence_overlap):
-        self.klog_size = klog_size
-        self.klog_overlap = klog_overlap
-        self.sentence_overlap = sentence_overlap
-        self.sentence_size = sentence_size
-        self.out_dir = self._get_out_dir(self.out_dir, klog_size, sentence_size)
-        self.line_creator = self._get_line_creator(phase, sentence_size)
-        self.out_file_prefix =  self._get_out_file_prefix(klog_overlap, sentence_overlap)
-        klogs_printer = self._get_klogs_printer(sentence_size)
-        with open(self.in_file) as f:
-            lines = f.read().splitlines()
-            i = 0
-            klogs = {}
-            for line in lines:
-                klogs[line.split()[0]] = self._createKlogsFromSequence(line.split()[1:])
-            return klogs_printer(self.out_file_prefix, klogs)
-    
+
     def _get_out_dir(self, out_dir, klog_size, sentence_size):
         if klog_size <= 0:
             raise ValueError
@@ -54,41 +62,43 @@ class Klog:
     def _get_line_creator(self, phase, sentence_size):
         if sentence_size == 0:
             if phase == "training":
-                return self._training_line_create
+                return self._create_one_line_with_label
             elif phase == "testing":
-                return self._testing_line_create
+                return self._create_one_line
             else:
                 raise ValueError
         else:
             if phase == "training":
-                return self._training_sentence_line_create
+                return self._line_create_sentence_with_label
             elif phase == "testing":
-                return self._testing_sentence_line_create
+                return self._line_create_sentence
             else:
                 raise ValueError
 
     
-    def _training_sentence_line_create(self, out_file, label, klog_split, i):
+    def _line_create_sentence_with_label(self, out_file, label, klog_split, i):
+        print("create_sentence_with_label ", label, i, self.sentence_size)
         out_file.write(label + " ")
-        self._testing_sentence_line_create(out_file, label, klog_split, i)
+        self._line_create_sentence(out_file, label, klog_split, i)
         
-    def _testing_sentence_line_create(self, out_file, label, klog_split, i):
+    def _line_create_sentence(self, out_file, label, klog_split, i):
         line = ""
         for j in range(i,i+self.sentence_size):
             line += klog_split[j] +" "
+        print ("adding sentence ", line.rstrip())
         out_file.write(line.rstrip()+"\n")
     
-    def _training_line_create(self, out_file, label, klog):
+    def _create_one_line_with_label(self, out_file, label, klog):
         out_file.write(label + " ")
-        self._testing_line_create(out_file, label, klog)
+        self._create_one_line(out_file, label, klog)
         
-    def _testing_line_create(self, out_file, label, klog):
+    def _create_one_line(self, out_file, label, klog):
         line = ""
         for k in klog.split():
             line += k + " "
         out_file.write(line.rstrip()+"\n")
     
-    def _get_out_file_prefix(self, klog_overlap, sentence_overlap):
+    def _get_out_file_prefix(self, out_dir, klog_overlap, sentence_overlap):
         if klog_overlap:
             ko = "klog_overlap"
         else:
@@ -99,38 +109,45 @@ class Klog:
         else:
             so = "sentence_nooverlap"
     
-        return self.out_dir + "/"+ko + "_" + so
+        return out_dir + "/"+ko + "_" + so
 
     def _get_klogs_printer(self, sentence_size):
-        if self.sentence_size == 0:
-            return self._print_klogs
+        if sentence_size == 0:
+            return self._print_one_liner_klogs
         else:
-            return self._print_sentences_of_klogs
+            return self._print_sentence_klogs
 
-    def _print_klogs(self, out_file, klogs):
+    def _get_out_filename_constructor(self, phase):
+        if phase == "training":
+            return self._construct_training_out_filename
+        elif phase == "testing":
+            return self._construct_testing_out_filename
+
+    def _construct_training_out_filename(self, out_filename, label):
+        return out_filename+".klog"
+
+    def _construct_testing_out_filename(self, out_filename, label):
+        label_wo_label = label.split("__label__")[1]
+        return out_filename+"_"+label_wo_label+".klog"
+    
+    def _print_one_liner_klogs(self, out_file, klogs):
         out_file = out_file+".klog"
-        if os.path.isfile(out_file):
-            pass
-        with open(out_file, 'w') as out_f:
+        with open(out_file, 'a+') as out_f:
             for label,klog in klogs.items():
                 self.line_creator(out_f, label, klog)
         return [out_file]
-    
-    def _print_sentences_of_klogs(self, out_file, klogs):
+
+
+    def _print_sentence_klogs(self, out_file, klogs):
         out_files = []
         for label,klog in klogs.items():
-            label_wo_label = label.split("__label__")[1]
-            res_file = out_file+"_"+label_wo_label+".klog"
+            res_file = self.out_filename_constructor(out_file, label)
             out_files.append(res_file)
-            if os.path.isfile(out_file+"_"+label_wo_label+".klog"):
-                continue
-            with open(out_file+"_"+label_wo_label+".klog", 'w') as out_f:
+            print("writing to ", res_file)
+            with open(res_file, 'a+') as out_f:
                 i = 0
                 klog_split = klog.split()
-                while i < len(klog_split)-self.sentence_size:
+                while i < len(klog_split)-self.sentence_size+1:
                     self.line_creator(out_f, label, klog_split, i)
-                    if self.sentence_overlap:
-                        i += 1
-                    else:
-                        i += self.sentence_size
-        return out_files
+                    i += self.sentence_increment
+        return out_files 

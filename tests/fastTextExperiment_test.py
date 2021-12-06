@@ -13,12 +13,11 @@ def fast_text_dir():
 
 
 def test_if_model_is_created_during_training(fast_text_dir):
-    model_file_check = "./tests/data/fastText/klog3/klog_model.bin"
+    model_file_check = "./tests/data/fastText/klog3/klog_model_klog_overlap_sentence_nooverlap.bin"
     if os.path.isfile(model_file_check):
         os.remove(model_file_check)
-    in_dir = "./tests/data/fastText/"
-    klog_size=3
-    fastTextTrainer = FastTextTrainer(fast_text_dir, in_dir, klog_size)
+    in_file = "./tests/data/fastText/klog3/klog_overlap_sentence_nooverlap.klog"
+    fastTextTrainer = FastTextTrainer(fast_text_dir, in_file)
     model_file = fastTextTrainer.train()
     assert(os.path.isfile(model_file_check))
 

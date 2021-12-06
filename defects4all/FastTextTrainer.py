@@ -1,10 +1,12 @@
 import subprocess
+from pathlib import Path
 class FastTextTrainer:
 
-    def __init__(self, fasttext_dir, in_dir, klog_size):
-        specific_train_in_dir = in_dir +"/klog"+str(klog_size)
-        self.filename = specific_train_in_dir+"/klog_overlap_sentence_nooverlap.klog"
-        self.model_file = specific_train_in_dir+"/klog_model"
+    def __init__(self, fasttext_dir, in_file):
+        specific_train_in_dir = str(Path(in_file).parent)
+        self.filename = in_file
+        file_no_ext = Path(in_file).stem
+        self.model_file = specific_train_in_dir+"/klog_model_"+file_no_ext
         self.fasttext_dir = fasttext_dir
 
     def train(self):
