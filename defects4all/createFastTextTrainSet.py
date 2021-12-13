@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 def create_raw_vector_representation(dir):
     for filename in os.listdir(dir):
@@ -30,28 +31,25 @@ def getFileName(filename, level):
 def create_fasttext_sequence_representation(directory,level):
     print("create_fasttext_sequence_representation")
     out_dir = directory + "/sequence"
+    if not os.path.exists(out_dir):
+        os.mkdir(out_dir)
     vec_path = out_dir +"/ut_log_as_sentence.vec"
     out_file =  open(vec_path, "w")
-    for filename in os.listdir(directory):
+    for filename in Path(directory).glob("*.drain"):
         vec_lines = []
         i=0
-        if filename.endswith(".drain"):
-            print("sequencing ", filename)
-            if directory[-1] != '/':
-                directory += '/'
-            with open(directory  + filename) as f:
-                lines = f.readlines()
-            for line in lines:
-                vec_lines.append(line.split('[')[0])
-                i = i + 1
-            if not os.path.exists(out_dir):
-                os.mkdir(out_dir)
-            label = "__label__" + getFileName(filename,level)
-            out_file.write(label + " ")
-            for item in vec_lines:
-                if item != "None":
-                    out_file.write(item + " ")
-            out_file.write("\n")
+        print("sequencing ", filename)
+        with open(filename) as f:
+            lines = f.readlines()
+        for line in lines:
+            vec_lines.append(line.split('[')[0])
+            i = i + 1
+        label = "__label__" + getFileName(filename.name,level)
+        out_file.write(label + " ")
+        for item in vec_lines:
+            if item != "None":
+                out_file.write(item + " ")
+        out_file.write("\n")
     out_file.close()
     return vec_path
 

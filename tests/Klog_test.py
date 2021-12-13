@@ -177,8 +177,9 @@ def test_result_file_should_be_overwritten():
     with open(res_file2[0]) as f:
         lines2 = f.readlines()
     assert(len(lines1) != len(lines2))
+    assert(len(lines2) == 4)
     assert(lines2[1].split()[-1]=="409t422t423t")
-    assert(lines2[2][1].split()[-1]=="415t416t417t")
+    assert(lines2[2].split()[-1]=="415t416t417t")
 
 def test_create_overlaping_klogs_and_sentences_for_two_test_sets():
     klog_size=3
