@@ -47,6 +47,24 @@ def test_create_sentence_longer_than_sequence():
 
     assert(line=="__label__someTest\t1t2t3t 2t3t4t 3t4t5t\n")
 
+def test_few_examples_shorter_than_klog_and_sentence():
+    klog_size=4
+    klog_overlap=True
+    sentence_size=6
+
+    train = True
+    specific_out_dir = "./tests/out/test_few_examples_shorter_than_sentence"
+    Path(specific_out_dir).mkdir(parents=True, exist_ok=True)
+    train_log_sequence_file = "./tests/data/few_shorter_than_sentence/ut_log_as_sentence.vec"
+    klog = Klog(train_log_sequence_file, specific_out_dir)
+    klog_train_file = klog.prepare_klog_file("training", klog_size, sentence_size, True, False)
+    with open(klog_train_file.pop()) as f:
+        line = f.readline()
+    print("line ",line)
+    assert(line.split()[0] == "__label__AxcContainerConfUncompressedWisdomTest")
+
+    assert(line=="__label__AxcContainerConfUncompressedWisdomTest\t389t389t\n")
+
 
 def test_create_klog_from_sequence_shorter_than_klog_size():
     klog_size=3
