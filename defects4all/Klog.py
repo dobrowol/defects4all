@@ -77,17 +77,18 @@ class Klog:
 
     
     def _line_create_sentence_with_label(self, out_file, label, klog_split, i):
-        out_file.write(label + " ")
+        out_file.write(label + "\t")
         self._line_create_sentence(out_file, label, klog_split, i)
         
     def _line_create_sentence(self, out_file, label, klog_split, i):
         line = ""
-        for j in range(i,i+self.sentence_size):
+        end = min(len(klog_split), i+self.sentence_size)
+        for j in range(i,end):
             line += klog_split[j] +" "
         out_file.write(line.rstrip()+"\n")
     
     def _create_one_line_with_label(self, out_file, label, klog):
-        out_file.write(label + " ")
+        out_file.write(label + "\t")
         self._create_one_line(out_file, label, klog)
         
     def _create_one_line(self, out_file, label, klog):
@@ -144,6 +145,8 @@ class Klog:
             with open(res_file, 'a+') as out_f:
                 i = 0
                 klog_split = klog.split()
+                self.line_creator(out_f, label, klog_split, i)
+                i+=self.sentence_increment
                 while i < len(klog_split)-self.sentence_size+1:
                     self.line_creator(out_f, label, klog_split, i)
                     i += self.sentence_increment

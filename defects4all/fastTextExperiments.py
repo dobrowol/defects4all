@@ -16,8 +16,8 @@ KLOG_MIN_SIZE = int(config['DEFAULT']['KLOG_MIN_SIZE'])
 KLOG_MAX_SIZE = int(config['DEFAULT']['KLOG_MAX_SIZE'])
 SENTENCE_MIN_SIZE = int(config['DEFAULT']['SENTENCE_MIN_SIZE'])
 SENTENCE_MAX_SIZE = int(config['DEFAULT']['SENTENCE_MAX_SIZE'])
-SENTENCE_OVERLAP = bool(config['DEFAULT']['SENTENCE_OVERLAP'])
-KLOG_OVERLAP = bool(config['DEFAULT']['KLOG_OVERLAP'])
+SENTENCE_OVERLAP = config['DEFAULT']['SENTENCE_OVERLAP'] == "True"
+KLOG_OVERLAP = config['DEFAULT']['KLOG_OVERLAP'] == "True"
 TRAINING_SENTENCE = config['DEFAULT']['TRAINING_SENTENCE'] == "True"
 TESTING_SENTENCE = config['DEFAULT']['TESTING_SENTENCE'] == "True"
 
@@ -43,38 +43,33 @@ testing_klog = Klog(test_log_sequence_file, klogs_runtime_dir)
 
 fasttext_experiment = {}
 print("preparing klogs...")
-#for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE)):
-for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MIN_SIZE+1)):
-    print("klog_size", klog_size)
+for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE+1,2)):
+#for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MIN_SIZE+1)):
     phase = "training"
     if not TRAINING_SENTENCE:
-        print("adding klog_size ", klog_size)
         fasttext_experiment[klog_size] = training_klog.prepare_klog_file(phase, klog_size, 0, KLOG_OVERLAP, SENTENCE_OVERLAP)
     else:
-        #for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE)):
-        for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MIN_SIZE+1)):
-            print("sentence_size ", sentence_size)
+        for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE+1,5)):
+        #for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MIN_SIZE+1)):
             fasttext_experiment[klog_size, sentence_size] = training_klog.prepare_klog_file(phase, klog_size, sentence_size, KLOG_OVERLAP, SENTENCE_OVERLAP)
 
     #for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE)):
     #    testing_klog.prepare_klog_file("testing", klog_size, sentence_size, KLOG_OVERLAP, SENTENCE_OVERLAP)
  
+print("only uniqe data...")
+from defects4all.unique_klogs import remove_duplicated_lines
+remove_duplicated_lines("./klogs")
+from defects4all.data_statistics import describe_datasets
+describe_datasets("./klogs")
 print("number of experiments ", len(fasttext_experiment))
 from tqdm import tqdm
-for key in fasttext_experiment:
-    print("key ", fasttext_experiment[key])
-    for experiment_file in fasttext_experiment[key]:
-        training_file, validating_file =splitToTrainingAndValidatingSet(experiment_file, 0.8)
-        print("processing experiment ",training_file)
-        fastTextTrainer = FastTextTrainer(FASTTEXT_DIR, training_file)
-        model_file = fastTextTrainer.train()
-        print("validating experiment ",validating_file)
-        fastTextValidator = FastTextValidator(FASTTEXT_DIR, model_file, validating_file)
-        fastTextValidator.validate()
-
-
-
-        #for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE)):
-        #    fastTextPredictor = FastTextPreidctor(FASTTEXT_DIR, in_runtime_dir, klog_size, sentence_size, model_file)
-        #    fastTextPredictor.predict()
-        
+#for key in fasttext_experiment:
+#    print("key ", fasttext_experiment[key])
+#    for experiment_file in fasttext_experiment[key]:
+#        training_file, validating_file =splitToTrainingAndValidatingSet(experiment_file, 0.8)
+#        print("processing experiment ",training_file)
+#        fastTextTrainer = FastTextTrainer(FASTTEXT_DIR, training_file)
+#        model_file = fastTextTrainer.train()
+#        print("validating experiment ",validating_file)
+#        fastTextValidator = FastTextValidator(FASTTEXT_DIR, model_file, validating_file)
+#        fastTextValidator.validate()
