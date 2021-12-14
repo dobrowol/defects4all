@@ -18,8 +18,9 @@ config = configparser.ConfigParser()
 config.sections()
 config.read('defects4all.ini')
 LEVEL=config['DEFAULT']['LEVEL']
+PARSED_LOGS=config['DEFAULT']['PARSED_LOGS']
 
-dest_train_path = "../parsed_logs/"+issue+"/"
+dest_train_path = PARSED_LOGS+"/"+issue+"/"
 dest_test_path = dest_train_path + "/runtime/"
 
 persistent_dir = issue

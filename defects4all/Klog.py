@@ -16,13 +16,11 @@ class Klog:
         self.out_filename_constructor = self._get_out_filename_constructor(phase)
         klogs_printer = self._get_klogs_printer(sentence_size)
         with open(self.in_file) as f:
-            print (self.in_file)
             lines = f.read().splitlines()
             i = 0
             klogs_labels = []
             klogs = []
             for line in lines:
-                print(line)
                 ks = self._createKlogsFromSequence(line.split()[1:])
                 klogs_labels.append(line.split()[0])
                 klogs.append(self._createKlogsFromSequence(line.split()[1:]))
@@ -82,7 +80,6 @@ class Klog:
 
     
     def _line_create_sentence_with_label(self, out_file, label, klog_split, i):
-        print("create sentence with tab ", label)
         out_file.write(label + "\t")
         self._line_create_sentence(out_file, label, klog_split, i)
         

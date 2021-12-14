@@ -59,17 +59,17 @@ for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE+1,2)):
 print("only uniqe data...")
 from defects4all.unique_klogs import remove_duplicated_lines
 remove_duplicated_lines("./klogs")
-from defects4all.data_statistics import describe_datasets
-describe_datasets("./klogs")
+#from defects4all.data_statistics import describe_datasets
+#describe_datasets("./klogs")
 print("number of experiments ", len(fasttext_experiment))
 from tqdm import tqdm
-#for key in fasttext_experiment:
-#    print("key ", fasttext_experiment[key])
-#    for experiment_file in fasttext_experiment[key]:
-#        training_file, validating_file =splitToTrainingAndValidatingSet(experiment_file, 0.8)
-#        print("processing experiment ",training_file)
-#        fastTextTrainer = FastTextTrainer(FASTTEXT_DIR, training_file)
-#        model_file = fastTextTrainer.train()
-#        print("validating experiment ",validating_file)
-#        fastTextValidator = FastTextValidator(FASTTEXT_DIR, model_file, validating_file)
-#        fastTextValidator.validate()
+for key in fasttext_experiment:
+    print("key ", fasttext_experiment[key])
+    for experiment_file in fasttext_experiment[key]:
+        training_file, validating_file =splitToTrainingAndValidatingSet(experiment_file, 0.8)
+        print("processing experiment ",training_file)
+        fastTextTrainer = FastTextTrainer(FASTTEXT_DIR, training_file)
+        model_file = fastTextTrainer.train()
+        print("validating experiment ",validating_file)
+        fastTextValidator = FastTextValidator(FASTTEXT_DIR, model_file, validating_file)
+        fastTextValidator.validate()

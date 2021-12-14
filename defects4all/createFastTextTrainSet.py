@@ -45,7 +45,7 @@ def create_fasttext_sequence_representation(directory,level):
             vec_lines.append(line.split('[')[0])
             i = i + 1
         label = "__label__" + getFileName(filename.name,level)
-        out_file.write(label + " ")
+        out_file.write(label + "\t")
         for item in vec_lines:
             if item != "None":
                 out_file.write(item + " ")
