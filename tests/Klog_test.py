@@ -3,8 +3,68 @@ import os
 from pathlib import Path
 from defects4all.Klog import Klog
 
-def number_of_sentences_nonoverlaping(number_of_lines, klog_size, sentence_size):
-    return (number_of_lines - klog_size + 1)//sentence_size
+def count_sequence_from_many_lines(sequences):
+    count = 0
+    for seq in sequences:
+        count += len(seq.split()[1:])
+    return count
+
+class NumberOfSentences:
+    def __init__(self,level, overlap):
+        self._log_event_number_getter = self._get_log_events_counter(level)
+        self._number_of_sentences_counter = self._get_sentences_counter(overlap)
+
+    def _training_num_of_log_event(self, sequence):
+        print("_training_num_of_log_event ", len(sequence.split()[1:]), sequence)
+        return len(sequence.split()[1:])
+
+    def _testing_num_of_log_event(self, sequence):
+        print("_testing_num_of_log_event ", len(sequence.split()), sequence)
+        return len(sequence.split())
+
+    def _get_log_events_counter(self,level):
+        if level == "training":
+            return self._training_num_of_log_event
+        else:
+            return self._testing_num_of_log_event
+        
+    def _get_sentences_counter(self, overlap):
+        if overlap == True:
+            return self._sentences_overlaping_counter
+        else:
+            return self._sentences_nonoverlaping_counter
+
+    def _sentences_nonoverlaping_counter(self, sequences, klog_size, sentence_size):
+        num = 0
+        print("_sentences_nonoverlaping_counter ", len(sequences))
+        for seq in sequences:
+            log_event_num = self._log_event_number_getter(seq)
+            if log_event_num < klog_size:
+                print("add 1")
+                num+= 1
+            elif log_event_num - klog_size < sentence_size:
+                print("add 1")
+                num += 1
+            else:
+                print("add ", (log_event_num - klog_size + 1)//sentence_size)
+                num += (log_event_num - klog_size + 1)//sentence_size
+        return num
+
+    def _sentences_overlaping_counter(self, sequences, klog_size, sentence_size):
+        num = 0
+        for seq in sequences:
+            log_event_num = self._log_event_number_getter(seq)
+            if log_event_num < klog_size:
+                num+= 1
+            elif log_event_num - klog_size < sentence_size:
+                num += 1
+            else:
+                num += log_event_num - klog_size - sentence_size + 2
+        return num
+
+    def countSentences(self, sequences, klog_size, sentence_size):
+        return self._number_of_sentences_counter(sequences, klog_size, sentence_size)
+
 
 @pytest.fixture
 def init_subsequences():
@@ -160,7 +220,9 @@ def test_create_overlaping_klogs_in_sentence_for_train_set():
 def test_create_overlaping_klogs_and_sentences_for_test_set():
     klog_size=3
     klog_overlap=True
+    sentence_overlap=False
     sentence_size=5
+    level="testing"
 
     train = False
     specific_out_dir = "./tests/out/test_create_overlaping_klogs_and_sentences_for_test_set"
@@ -169,12 +231,13 @@ def test_create_overlaping_klogs_and_sentences_for_test_set():
     with open(test_log_sequence_file) as f:
         sequence = f.readline()
     klog = Klog(test_log_sequence_file, specific_out_dir)
-    klog_train_file = klog.prepare_klog_file("testing", klog_size, sentence_size, True, False)
+    klog_train_file = klog.prepare_klog_file(level, klog_size, sentence_size, klog_overlap, sentence_overlap)
     with open(klog_train_file.pop()) as f:
         lines = f.readlines()
     assert(lines[0].split()[0] == "408t409t410t")
     assert(lines[0].split()[-1] == "412t413t414t")
-    assert(len(lines) == number_of_sentences_nonoverlaping(len(sequence.split()),klog_size,sentence_size))
+    ns = NumberOfSentences(level,sentence_overlap)
+    assert(len(lines) == ns.countSentences(lines,klog_size,sentence_size))
 
 def test_result_file_should_be_overwritten():
     klog_size=3
@@ -202,7 +265,9 @@ def test_result_file_should_be_overwritten():
 def test_create_overlaping_klogs_and_sentences_for_two_test_sets():
     klog_size=3
     klog_overlap=True
+    sentence_overlap=False
     sentence_size=5
+    level="testing"
 
     train = False
     specific_out_dir = "./tests/out/test_create_overlaping_klogs_and_sentences_for_two_test_sets"
@@ -212,12 +277,77 @@ def test_create_overlaping_klogs_and_sentences_for_two_test_sets():
     with open(test_log_sequence_file) as f:
         sequence = f.readline()
     klog = Klog(test_log_sequence_file, specific_out_dir)
-    klog_train_file = klog.prepare_klog_file("testing", klog_size, sentence_size, True, False)
+    klog_train_file = klog.prepare_klog_file(level, klog_size, sentence_size, klog_overlap, sentence_overlap)
     assert(len(klog_train_file) == 2)
     assert(rmod1_out_file in klog_train_file)
     with open(rmod1_out_file) as f:
         lines = f.readlines()
     assert(lines[0].split()[0] == "408t409t410t")
     assert(lines[0].split()[-1] == "412t413t414t")
-    assert(len(lines) == number_of_sentences_nonoverlaping(len(sequence.split()),klog_size,sentence_size))
+    ns = NumberOfSentences(level,sentence_overlap)
+    assert(len(lines) == ns.countSentences(lines,klog_size,sentence_size))
+
+def test_number_of_sentence_overlaping():
+    klog_size=3
+    klog_overlap=True
+    sentence_overlap=True
+    sentence_size=5
+    level="testing"
+
+    train = False
+    specific_out_dir = "./tests/out/test_number_of_sentence_overlaping"
+    Path(specific_out_dir).mkdir(parents=True, exist_ok=True)
+    test_log_sequence_file = "./tests/data/issue_test2/ut_log_as_sentence.vec"
+    with open(test_log_sequence_file) as f:
+        sequence = f.readline()
+    klog = Klog(test_log_sequence_file, specific_out_dir)
+    klog_train_file = klog.prepare_klog_file(level, klog_size, sentence_size, klog_overlap, sentence_overlap)
+    assert(len(klog_train_file) == 1)
+    with open(klog_train_file.pop()) as f:
+        lines = f.readlines()
+    ns = NumberOfSentences(level,sentence_overlap)
+    assert(len(lines) == ns.countSentences(lines,klog_size,sentence_size))
+
+def test_number_of_sentence_overlaping_for_2_6():
+    klog_size=2
+    klog_overlap=True
+    sentence_overlap=True
+    sentence_size=6
+    level = "training"
+
+    train = False
+    specific_out_dir = "./tests/out/test_number_of_sentence_overlaping_for_2_6"
+    Path(specific_out_dir).mkdir(parents=True, exist_ok=True)
+    test_log_sequence_file = "./tests/data/issue_test_overlap/ut_log_as_sentence_2.vec"
+    with open(test_log_sequence_file) as f:
+        sequences = f.readlines()
+    klog = Klog(test_log_sequence_file, specific_out_dir)
+    klog_train_file = klog.prepare_klog_file(level, klog_size, sentence_size, klog_overlap, sentence_overlap)
+    assert(len(klog_train_file) == 1)
+    with open(klog_train_file.pop()) as f:
+        lines = f.readlines()
+    ns = NumberOfSentences(level,sentence_overlap)
+    assert(len(lines) == ns.countSentences(sequences,klog_size,sentence_size))
+
+def test_number_of_sentence_overlaping_for_10_21():
+    klog_size=10
+    klog_overlap=True
+    sentence_overlap=True
+    sentence_size=21
+    level = "training"
+
+    train = False
+    specific_out_dir = "./tests/out/test_number_of_sentence_overlaping_for_10_21"
+    Path(specific_out_dir).mkdir(parents=True, exist_ok=True)
+    test_log_sequence_file = "./tests/data/issue_test_overlap/ut_log_as_sentence_2.vec"
+    with open(test_log_sequence_file) as f:
+        sequences = f.readlines()
+    klog = Klog(test_log_sequence_file, specific_out_dir)
+    klog_train_file = klog.prepare_klog_file(level, klog_size, sentence_size, klog_overlap, sentence_overlap)
+    assert(len(klog_train_file) == 1)
+    with open(klog_train_file.pop()) as f:
+        lines = f.readlines()
+    ns = NumberOfSentences(level,sentence_overlap)
+    assert(len(lines) == ns.countSentences(sequences,klog_size,sentence_size))
+
 
