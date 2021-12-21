@@ -43,15 +43,15 @@ testing_klog = Klog(test_log_sequence_file, klogs_runtime_dir)
 
 fasttext_experiment = {}
 print("preparing klogs...")
-for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE+1)):
+#for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE+1,10)):
 #for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MIN_SIZE+1)):
-    phase = "training"
-    if not TRAINING_SENTENCE:
-        fasttext_experiment[klog_size] = training_klog.prepare_klog_file(phase, klog_size, 0, KLOG_OVERLAP, SENTENCE_OVERLAP)
-    else:
-        for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE+1,5)):
+#    phase = "training"
+#    if not TRAINING_SENTENCE:
+#        fasttext_experiment[klog_size] = training_klog.prepare_klog_file(phase, klog_size, 0, KLOG_OVERLAP, SENTENCE_OVERLAP)
+#    else:
+#        for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE+1,10)):
         #for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MIN_SIZE+1)):
-            fasttext_experiment[klog_size, sentence_size] = training_klog.prepare_klog_file(phase, klog_size, sentence_size, KLOG_OVERLAP, SENTENCE_OVERLAP)
+#            fasttext_experiment[klog_size, sentence_size] = training_klog.prepare_klog_file(phase, klog_size, sentence_size, KLOG_OVERLAP, SENTENCE_OVERLAP)
 
     #for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE)):
     #    testing_klog.prepare_klog_file("testing", klog_size, sentence_size, KLOG_OVERLAP, SENTENCE_OVERLAP)
@@ -59,5 +59,7 @@ for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE+1)):
 #print("only uniqe data...")
 #from defects4all.unique_klogs import remove_duplicated_lines
 #remove_duplicated_lines("./klogs")
-from defects4all.data_statistics import describe_words
-describe_words("./klogs", "./stats")
+#from defects4all.data_statistics import describe_words
+from defects4all.data_statistics import describe_sentence
+#describe_words("./klogs", "./stats")
+describe_sentence("./klogs", "./stats")

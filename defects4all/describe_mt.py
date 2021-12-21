@@ -11,4 +11,5 @@ def describe_mt(input_dir):
         data.sequence_length.value_counts().to_csv(out_file, index=True, header=True)
         print("sequence length mean")
         out_agg_file = str(path)+"agg.csv"
+        print(data["test_suite"].nunique())
         data.sequence_length.agg(['min', 'max', 'mean', 'median']).to_csv(out_agg_file, index=True, header=True)
