@@ -7,6 +7,16 @@ def klogs_present_in_one_testsuite(df):
 def klogs_and_coresponding_testsuites(df):
     return df.groupby("klogs_words")["test_suite"].nunique().reset_index(name='nunique').sort_values(['nunique'], ascending=False)
 
+def get_testsuites_names(df):
+    g = df.groupby("test_suite")
+    return g.groups.keys()
+
+def get_testsuites_samples(df):
+    return df.groupby("test_suite")["klogs_words"].value_counts()
+
+def get_testsuites_samples_count(df):
+    return df.groupby("test_suite")["klogs_words"].size()
+
 def get_testnames_for_klogs_appeared_once(df, out_dir, in_file):
     out_grouped_testsuite_file = out_dir/(str(in_file)+"_testsuite_by_words.csv")
     out_count_1_grouped_testsuite = out_dir/(str(in_file)+"_count_1_testsuite.csv")
@@ -46,6 +56,9 @@ def create_sentence_out_dir(output_dir, input_dir):
     out_dir.mkdir(parents=True, exist_ok=True)
     return out_dir
 
+def describe_samples(df):
+    return df.groupby("test_suite")["klogs_words"].size().describe()
+    
 def describe_words(input_dir, output_dir):
     for path in Path(input_dir).rglob('klog*/sentence1/*.klog'):
         print("word statistics for ", path)
@@ -58,9 +71,9 @@ def describe_words(input_dir, output_dir):
 
         df.klogs_words.value_counts().to_csv(out_file, index=True, header=True)
         res = klogs_and_coresponding_testsuites(df) 
-        res.to_csv(out_grouped_file, index=False, header=True)
+        res.to_csv(out_grouped_file, index=True, header=True)
         res = klogs_present_in_one_testsuite(df)
-        res.to_csv(out_file_testuite_with_unique_words, index=False, header=True)
+        res.to_csv(out_file_testuite_with_unique_words, index=True, header=True)
         #get_testnames_for_klogs_appeared_once(df, out_dir, path.stem)
         #get_testnames_for_klogs_appeared_max(df, out_dir, path.stem)
        #print(res)
@@ -75,22 +88,22 @@ def describe_sentence(input_dir, output_dir):
         #    print(line)
         #    klogs = line.split('\t')[1]
         #    klogs_list["klogs"].extend(klogs.split())
-        dataset = pd.read_csv(path, sep='\t',names=["test_suite", "klogs_words"])
+        df = pd.read_csv(path, sep='\t',names=["test_suite", "klogs_words"])
         
         out_grouped_file = out_dir/(str(path.stem)+"_words_by_testsuite.csv")
         out_file_testuite_with_unique_words= out_dir/(str(path.stem)+"_testsuites_with_unique_words.csv")
-        #res = dataset.groupby("test_suite")["klogs_words"].nunique()
+        #res = df.groupby("test_suite")["klogs_words"].nunique()
         #res.to_csv(out_grouped_file, index=True, header=True)
-        #print ("balance of dataset ", out_file)
-        #print ("aggregate of dataset ", out_agg_file)
-        #dataset = pd.read_csv(path, sep='\t')
-        #pd.dataset.iloc[:, 2]
-        dataset.test_suite.value_counts().to_csv(out_file, index=True, header=True)
-        dataset.test_suite.value_counts().agg(['min', 'max', 'mean', 'median']).to_csv(out_agg_file, index=True, header=True)
+        #print ("balance of df ", out_file)
+        #print ("aggregate of df ", out_agg_file)
+        #df = pd.read_csv(path, sep='\t')
+        #pd.df.iloc[:, 2]
+        df.test_suite.value_counts().to_csv(out_file, index=True, header=True)
+        df.test_suite.value_counts().agg(['min', 'max', 'mean', 'median']).to_csv(out_agg_file, index=True, header=True)
         res = klogs_and_coresponding_testsuites(df) 
-        res.to_csv(out_grouped_file, index=False, header=True)
+        res.to_csv(out_grouped_file, index=True, header=True)
         res = klogs_present_in_one_testsuite(df)
-        res.to_csv(out_file_testuite_with_unique_words, index=False, header=True)
-        #get_testnames_for_klogs_appeared_once(dataset, out_dir, path.stem)
+        res.to_csv(out_file_testuite_with_unique_words, index=True, header=True)
+        #get_testnames_for_klogs_appeared_once(df, out_dir, path.stem)
 
-describe_sentence("./tests/data/9sentence_stats", "./tests/out/sentence_stats")
+describe_sentence("./tests/data/sentence_stats", "./tests/out/sentence_stats")

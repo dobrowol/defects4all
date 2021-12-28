@@ -43,16 +43,17 @@ training_klog = Klog(train_log_sequence_file, klogs_dir)
 #testing_klog = Klog(test_log_sequence_file, klogs_runtime_dir)
 
 fasttext_experiment = {}
+from defects4all.getKlogsFromDirectory import getKlogsFromDirectory
+fasttext_experiment = getKlogsFromDirectory("./klogs")
 print("preparing klogs...")
-for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE+1,2)):
-#for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MIN_SIZE+1)):
-    phase = "training"
-    if not TRAINING_SENTENCE:
-        fasttext_experiment[klog_size] = training_klog.prepare_klog_file(phase, klog_size, 0, KLOG_OVERLAP, SENTENCE_OVERLAP)
-    else:
-        for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE+1,5)):
+#for klog_size in tqdm(range(KLOG_MIN_SIZE, KLOG_MAX_SIZE+1,10)):
+#    phase = "training"
+#    if not TRAINING_SENTENCE:
+#        fasttext_experiment[klog_size] = training_klog.prepare_klog_file(phase, klog_size, 0, KLOG_OVERLAP, SENTENCE_OVERLAP)
+#    else:
+#        for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE+1,10)):
         #for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MIN_SIZE+1)):
-            fasttext_experiment[klog_size, sentence_size] = training_klog.prepare_klog_file(phase, klog_size, sentence_size, KLOG_OVERLAP, SENTENCE_OVERLAP)
+#            fasttext_experiment[klog_size, sentence_size] = training_klog.prepare_klog_file(phase, klog_size, sentence_size, KLOG_OVERLAP, SENTENCE_OVERLAP)
 
     #for sentence_size in tqdm(range(SENTENCE_MIN_SIZE, SENTENCE_MAX_SIZE)):
     #    testing_klog.prepare_klog_file("testing", klog_size, sentence_size, KLOG_OVERLAP, SENTENCE_OVERLAP)
@@ -62,7 +63,7 @@ print("only uniqe data...")
 #remove_duplicated_lines("./klogs")
 print("number of experiments ", len(fasttext_experiment))
 from tqdm import tqdm
-from defects4all.oversampler import oversample_file
+#from defects4all.oversampler import oversample_file
 for key in fasttext_experiment:
     print("key ", fasttext_experiment[key])
     for experiment_file in fasttext_experiment[key]:
