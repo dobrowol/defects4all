@@ -106,4 +106,4 @@ def describe_sentence(input_dir, output_dir):
         res.to_csv(out_file_testuite_with_unique_words, index=True, header=True)
         #get_testnames_for_klogs_appeared_once(df, out_dir, path.stem)
 
-describe_sentence("./tests/data/sentence_stats", "./tests/out/sentence_stats")
+#describe_sentence("./tests/data/sentence_stats", "./tests/out/sentence_stats")

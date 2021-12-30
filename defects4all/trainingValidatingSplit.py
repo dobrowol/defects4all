@@ -2,12 +2,17 @@ import random
 from pathlib import Path
 import os
      
-def splitToTrainingAndValidatingSet(in_file, percentage=0.75):
+def splitToTrainingAndValidatingSet(in_file, out_dir, percentage=0.75):
     fin = open(in_file, 'r') 
     in_dir = os.path.dirname(in_file)
+
+    out_sub_dir = str(Path(in_file).parent).split('/')
+    res_dir = Path(out_dir)/out_sub_dir[-3]/out_sub_dir[-2]/out_sub_dir[-1]
+    res_dir.mkdir(parents=True, exist_ok=True)
+
     filename = Path(in_file).stem
-    ftrain_name = in_dir + "/" + filename + "_train.txt"
-    fvalid_name = in_dir + "/" + filename + "_validate.txt"
+    ftrain_name = res_dir / (filename + "_train.txt")
+    fvalid_name = res_dir / (filename + "_validate.txt")
     ftrain = open(ftrain_name, 'w') 
     fvalid = open(fvalid_name, 'w') 
     for line in fin: 

@@ -6,6 +6,10 @@ def balance_dataframe(df):
     data_stats = describe_samples(df)
     oversample_to = int((10*data_stats.max())//100)
     undersample_to = int((50*data_stats.max())//100)
+    if oversample_to < 1:
+        oversample_to=1
+    if undersample_to<1:
+        undersample_to=1
     print("oversample to ", oversample_to)
     print("undersample to ", undersample_to)
     oversampled_df = oversample_dataframe(df, oversample_to)

@@ -9,4 +9,4 @@ class FastTextValidator:
 
     def validate(self):
         print("validate ", self.filename)
-        subprocess.call("%s/fasttext test %s %s" %(self.fasttext_dir, self.model_file, self.filename), shell=True)
+        subprocess.call("%s/fasttext test %s %s -1 0.5" %(self.fasttext_dir, self.model_file, self.filename), shell=True)
