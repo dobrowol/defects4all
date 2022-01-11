@@ -1,6 +1,8 @@
 import random 
 from pathlib import Path
 import os
+from sklearn.model_selection import train_test_split
+import pandas as pd
      
 def splitToTrainingAndValidatingSet(in_file, out_dir, percentage=0.75):
     fin = open(in_file, 'r') 
@@ -25,3 +27,10 @@ def splitToTrainingAndValidatingSet(in_file, out_dir, percentage=0.75):
     ftrain.close() 
     fvalid.close() 
     return ftrain_name, fvalid_name
+
+def train_test_split_file(in_file, percentage=0.75):
+    klogs = pd.read_csv(in_file,  sep='\t', encoding='utf-8')
+    klogs.columns = ["label", "klog"] 
+    return train_test_split(klogs['klog'],
+                            klogs['label'], test_size=0.2)
+    
