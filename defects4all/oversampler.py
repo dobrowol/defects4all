@@ -3,6 +3,17 @@ from imblearn.over_sampling import RandomOverSampler
 import pandas as pd
 import numpy
 
+
+def get_sampling_strategy(df, value):
+    samples_count = get_testsuites_samples_count(df)
+    
+    sampling_strategy={}
+    for sample,count in samples_count.items():
+        if count < value:
+            sampling_strategy[sample]=value
+    return sampling_strategy
+
+
 # define dataset
 def oversample_dataframe(df, value):
     
