@@ -14,18 +14,17 @@ from os.path import dirname
 from drain3.kafka_persistence import KafkaPersistence
 from drain3 import TemplateMiner
 from drain3.template_miner_config import TemplateMinerConfig
+from pathlib import Path
 
-
-def infering_file(in_log_file, in_log_dir, persistent_file):
+def infering_file(in_log_file, persistent_file):
         
     config = TemplateMinerConfig()
-    config.load( "drain3.ini")
+    config.load( "hdfs/drain3.ini")
     config.profiling_enabled = False
 
     from drain3.file_persistence import FilePersistence
 
-    persistence = FilePersistence(persistent_file)
-
+    persistence = FilePersistence(str(persistent_file))
 
     template_miner = TemplateMiner(persistence, config=config)
     
