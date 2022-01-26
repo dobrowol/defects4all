@@ -23,10 +23,11 @@ def create_raw_vector_representation(dir):
                 f.write("\n")
 
 def getFileName(filename, level):
+    print(filename)
     if level == "TestSuite":
-        return (filename.split(".")[0]).split('_')[0]
+        return (filename.split(".drain")[0]).split('_')[0]
     else:
-         return filename.split(".")[0]
+         return filename.split(".drain")[0]
 
 def create_fasttext_sequence_representation(directory,level):
     print("create_fasttext_sequence_representation")
@@ -40,16 +41,10 @@ def create_fasttext_sequence_representation(directory,level):
         i=0
         print("sequencing ", filename)
         with open(filename) as f:
-            lines = f.readlines()
-        for line in lines:
-            vec_lines.append(line.split('[')[0])
-            i = i + 1
+            line = f.readline()
+        vec_lines.append(line)
         label = "__label__" + getFileName(filename.name,level)
-        out_file.write(label + "\t")
-        for item in vec_lines:
-            if item != "None":
-                out_file.write(item + " ")
-        out_file.write("\n")
+        out_file.write(label + "\t" + line+"\n")
     out_file.close()
     return vec_path
 
