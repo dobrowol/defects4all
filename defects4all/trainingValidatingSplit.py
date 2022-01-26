@@ -29,7 +29,7 @@ def splitToTrainingAndValidatingSet(in_file, out_dir, percentage=0.75):
     return ftrain_name, fvalid_name
 
 def train_test_split_file(in_file, percentage=0.75):
-    klogs = pd.read_csv(in_file,  sep='\t', encoding='utf-8')
+    klogs = pd.read_csv(in_file,  sep='\t', encoding='utf-8', index_col=False)
     klogs.columns = ["label", "klog"] 
     return train_test_split(klogs['klog'],
                             klogs['label'], test_size=0.2)

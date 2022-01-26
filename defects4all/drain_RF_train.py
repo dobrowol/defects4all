@@ -11,10 +11,9 @@ import subprocess
 import sys
 import time
 from os.path import dirname
-from drain3.kafka_persistence import KafkaPersistence
 from drain3 import TemplateMiner
 from drain3.template_miner_config import TemplateMinerConfig
-
+from tqdm import tqdm
 
 def parsing_file(in_log_file, in_log_dir, persistent_file):
     config = TemplateMinerConfig()
@@ -33,7 +32,7 @@ def parsing_file(in_log_file, in_log_dir, persistent_file):
         return
     if in_log_dir[-1] != "/":
         in_log_dir = in_log_dir + "/"
-    print("processing ", in_log_dir + in_log_file)
+    #print("processing ", in_log_dir + in_log_file)
     with open(in_log_dir + in_log_file) as f:
         lines = f.readlines()
     

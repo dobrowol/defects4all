@@ -11,7 +11,6 @@ import subprocess
 import sys
 import time
 from os.path import dirname
-from drain3.kafka_persistence import KafkaPersistence
 from drain3 import TemplateMiner
 from drain3.template_miner_config import TemplateMinerConfig
 
@@ -29,8 +28,6 @@ def infering_file(in_log_file, in_log_dir, persistent_file):
 
     template_miner = TemplateMiner(persistence, config=config)
     
-    line_count = 0
-    
     if(in_log_file == "result"):
         return
     if in_log_dir[-1] != '/':
@@ -46,22 +43,20 @@ def infering_file(in_log_file, in_log_dir, persistent_file):
     out_dir = in_log_dir+"result"
     if not os.path.exists(out_dir):
         os.mkdir(out_dir)
-    out_file = in_log_file.split('.')[0] + ".drain" 
+    out_file = in_log_file.split('.txt')[0] + ".drain" 
     with open(out_dir+"/"+out_file, 'w+') as out_log_file:
         
         for line in lines:
             line = line.rstrip()
             if len(line) == 0:
                     continue
-            cluster, data = template_miner.match(line)
+            cluster = template_miner.match(line)
             if cluster is None:
-                out_log_file.write("None"+str(data)+'\n')
-            else:
-                out_log_file.write(str(cluster.cluster_id)+str(data)+'\n')
-            line_count += 1
+                print("not found cluster for", line)
+            if cluster is not None:
+                out_log_file.write(str(cluster.cluster_id)+' ')
         
     time_took = time.time() - start_time
-    rate = line_count / time_took
     #logger.info(f"--- Done processing file in {time_took:.2f} sec. Total of {line_count} lines, rate {rate:.1f} lines/sec, "
     #            f"{len(template_miner.drain.clusters)} clusters")
     

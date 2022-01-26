@@ -1,5 +1,5 @@
-from drain_RF_train import parsing_file
-from drain_RF_infer import infering_file
+from defects4all.drain_RF_train import parsing_file
+from defects4all.drain_RF_infer import infering_file
 import argparse
 import os
 import glob
@@ -18,7 +18,7 @@ config = configparser.ConfigParser()
 config.sections()
 config.read('defects4all.ini')
 LEVEL=config['DEFAULT']['LEVEL']
-PARSED_LOGS=config['DEFAULT']['PARSED_LOGS']
+PARSED_LOGS=config['DEFAULT']['PARSED_LOGS_DIR']
 
 dest_train_path = PARSED_LOGS+"/"+issue+"/"
 dest_test_path = dest_train_path + "/runtime/"
@@ -27,10 +27,13 @@ persistent_dir = issue
 if not os.path.isdir(persistent_dir):
     os.mkdir(persistent_dir)
 persistent_file = persistent_dir + "/drain3_state.bin"
+print("training drain")
+from tqdm import tqdm
 if not os.path.isfile(persistent_file):
-    for f in glob.glob(dest_train_path+"/*.log"):
+    for f in tqdm(glob.glob(dest_train_path+"/*.txt")):
         parsing_file(f.split('/')[-1], dest_train_path, persistent_file)    
-for f in  glob.glob(dest_train_path+"/*.log"):
+print("infering drain")
+for f in  tqdm(glob.glob(dest_train_path+"/*.txt")):
     infering_file(f.split('/')[-1], dest_train_path, persistent_file)    
 
 #subprocess.call("rm -rf %s/*log"%dest_train_path, shell=True)
@@ -44,9 +47,9 @@ for f in  glob.glob(dest_test_path+"/*.log"):
 subprocess.call("cp %sresult/*drain %s"% (dest_test_path, dest_test_path), shell=True)
 subprocess.call("rm -rf %sresult" %dest_test_path, shell=True)
 
-import createFastTextTestSet
-import createFastTextTrainSet
+#import defects4all.createFastTextTestSet
+from defects4all.createFastTextTrainSet import create_fasttext_sequence_representation 
 
-createFastTextTrainSet.create_fasttext_sequence_representation(dest_train_path, LEVEL)
-for f in  glob.glob(dest_test_path+"/*.drain"):
-    createFastTextTestSet.create_fasttext_sequence_representation(f)
+create_fasttext_sequence_representation(dest_train_path, LEVEL)
+#for f in  glob.glob(dest_test_path+"/*.drain"):
+#    createFastTextTestSet.create_fasttext_sequence_representation(f)
