@@ -31,7 +31,7 @@ if not os.path.isfile(persistent_file):
     for f in glob.glob(dest_train_path+"/*.log"):
         parsing_file(f.split('/')[-1], dest_train_path, persistent_file)    
 for f in  glob.glob(dest_train_path+"/*.log"):
-    infering_file(f.split('/')[-1], dest_train_path, persistent_file)    
+    infering_file(f, persistent_file)    
 
 #subprocess.call("rm -rf %s/*log"%dest_train_path, shell=True)
 subprocess.call("cp %sresult/*drain %s"% (dest_train_path, dest_train_path), shell=True)

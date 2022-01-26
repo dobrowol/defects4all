@@ -11,18 +11,19 @@ import subprocess
 import sys
 import time
 from os.path import dirname
-from drain3.kafka_persistence import KafkaPersistence
 from drain3 import TemplateMiner
 from drain3.template_miner_config import TemplateMinerConfig
 from pathlib import Path
 
 def infering_file(in_log_file, persistent_file):
         
+    in_log_dir = Path(in_log_file).parent
     config = TemplateMinerConfig()
     config.load( "hdfs/drain3.ini")
     config.profiling_enabled = False
 
     from drain3.file_persistence import FilePersistence
+    print("persistence file ", persistent_file)
 
     persistence = FilePersistence(str(persistent_file))
 
@@ -32,21 +33,19 @@ def infering_file(in_log_file, persistent_file):
     
     if(in_log_file == "result"):
         return
-    if in_log_dir[-1] != '/':
-        in_log_dir += '/'
 
-    print("infer file ", in_log_dir + in_log_file)
-    with open(in_log_dir + in_log_file, errors='replace') as f:
+    print("infer file ", in_log_file)
+    with open(in_log_file, errors='replace') as f:
         lines = f.readlines()
     
     start_time = time.time()
     batch_start_time = start_time
     batch_size = 10000
-    out_dir = in_log_dir+"result"
+    out_dir = in_log_dir/"result"
     if not os.path.exists(out_dir):
         os.mkdir(out_dir)
-    out_file = in_log_file.split('.')[0] + ".drain" 
-    with open(out_dir+"/"+out_file, 'w+') as out_log_file:
+    out_file = Path(in_log_file).stem + ".drain" 
+    with open(out_file, 'w+') as out_log_file:
         
         for line in lines:
             line = line.rstrip()
@@ -56,6 +55,7 @@ def infering_file(in_log_file, persistent_file):
             if cluster is None:
                 out_log_file.write("None"+str(data)+'\n')
             else:
+                print("found")
                 out_log_file.write(str(cluster.cluster_id)+str(data)+'\n')
             line_count += 1
         
@@ -65,7 +65,7 @@ def infering_file(in_log_file, persistent_file):
     #            f"{len(template_miner.drain.clusters)} clusters")
     
     sorted_clusters = sorted(template_miner.drain.clusters, key=lambda it: it.size, reverse=True)
-    with open(out_dir+"/clusters", 'w+') as out_cluster:
+    with open(out_dir/"clusters", 'w+') as out_cluster:
         for cluster in sorted_clusters:
             out_cluster.write(str(cluster)+'\n')
 
