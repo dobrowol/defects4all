@@ -4,6 +4,13 @@ from pathlib import Path
 def klogs_present_in_one_testsuite(df):
     return df.groupby('klogs_words', as_index=False).filter(lambda x: x["test_suite"].nunique() == 1)["test_suite"].value_counts()
 
+import statistics
+def get_klogs_average_length(df):
+    return statistics.mean(df["klogs_words"].apply(len))
+
+def get_klogs_median_length(df):
+    return statistics.median(df["klogs_words"].apply(len))
+
 def klogs_and_coresponding_testsuites(df):
     return df.groupby("klogs_words")["test_suite"].nunique().reset_index(name='nunique').sort_values(['nunique'], ascending=False)
 

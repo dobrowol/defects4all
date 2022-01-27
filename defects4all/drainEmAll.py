@@ -27,13 +27,16 @@ persistent_dir = issue
 if not os.path.isdir(persistent_dir):
     os.mkdir(persistent_dir)
 persistent_file = persistent_dir + "/drain3_state.bin"
+config_file = issue + "/drain3.ini"
 print("training drain")
 from tqdm import tqdm
 if not os.path.isfile(persistent_file):
     for f in tqdm(glob.glob(dest_train_path+"/*.txt")):
         parsing_file(f.split('/')[-1], dest_train_path, persistent_file)    
-for f in  tqdm(glob.glob(dest_train_path+"/*.txt")):
-    infering_file(f, persistent_file)    
+if not glob.glob(dest_train_path+"/*drain"):
+    print("infering files")
+    for f in  tqdm(glob.glob(dest_train_path+"/*.txt")):
+        infering_file(f, config_file, persistent_file)    
 #subprocess.call("rm -rf %s/*log"%dest_train_path, shell=True)
 subprocess.call("cp %sresult/*drain %s"% (dest_train_path, dest_train_path), shell=True)
 subprocess.call("rm -rf %sresult" %dest_train_path, shell=True)

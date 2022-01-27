@@ -48,4 +48,3 @@ def create_fasttext_sequence_representation(directory,level):
     out_file.close()
     return vec_path
 
-

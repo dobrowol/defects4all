@@ -32,13 +32,14 @@ label_encoder = label_encoder.fit(y_test)
 label_encoder = label_encoder.fit(y_train)
 label_encoded_y = label_encoder.transform(y_train)
 X, y = balance_series(X_train, label_encoded_y) 
-scores = cross_validate(pipeline, X, y, scoring=scoring, cv=5, n_jobs=-1, return_estimator=True)
+#scores = cross_validate(pipeline, X, y, scoring=scoring, cv=5, n_jobs=-1, return_estimator=True)
+#print("test accuracy", mean(scores['test_acc']))
+#print("precision", mean(scores['test_prec']))
+#print("recall", mean(scores['test_rec']))
 model = pipeline.fit(X, y)
 #rfc_fit = scores['estimator']
 #model = rfs_fit[0]
-print("test accuracy", mean(scores['test_acc']))
-print("precision", mean(scores['test_prec']))
-print("recall", mean(scores['test_rec']))
 import pickle
-filename = 'gradient_boost_model.sav'
+from pathlib import Path
+filename = Path(experiment_file).parents[0]/'gradient_boost_model.sav'
 pickle.dump(model, open(filename, 'wb'))

@@ -15,15 +15,14 @@ from drain3 import TemplateMiner
 from drain3.template_miner_config import TemplateMinerConfig
 from pathlib import Path
 
-def infering_file(in_log_file, persistent_file):
+def infering_file(in_log_file, config_file, persistent_file):
         
     in_log_dir = Path(in_log_file).parent
     config = TemplateMinerConfig()
-    config.load( "hdfs/drain3.ini")
+    config.load(config_file)
     config.profiling_enabled = False
 
     from drain3.file_persistence import FilePersistence
-    print("persistence file ", persistent_file)
 
     persistence = FilePersistence(str(persistent_file))
 
@@ -32,23 +31,23 @@ def infering_file(in_log_file, persistent_file):
     if(in_log_file == "result"):
         return
 
-    print("infer file ", in_log_file)
+    print("infering file ", in_log_file)
     with open(in_log_file, errors='replace') as f:
         lines = f.readlines()
     
     start_time = time.time()
     batch_start_time = start_time
     batch_size = 10000
-    out_dir = in_log_dir/"result"
+    out_dir = in_log_dir
     if not os.path.exists(out_dir):
         os.mkdir(out_dir)
-    out_file = Path(in_log_file).stem + ".drain" 
+    out_file = out_dir/(Path(in_log_file).stem + ".drain")
     with open(out_file, 'w+') as out_log_file:
         for line in lines:
             line = line.rstrip()
             if len(line) == 0:
                     continue
-            cluster = template_miner.match(line)
+            cluster,_ = template_miner.match(line)
             if cluster is None:
                 print("not found cluster for", line)
             if cluster is not None:

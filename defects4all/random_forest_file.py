@@ -25,11 +25,12 @@ scoring = {'acc': 'accuracy',
 X_train, X_test, y_train, y_test = train_test_split_file(experiment_file, 0.8)
 X, y = balance_series(X_train, y_train) 
 scores = cross_validate(pipeline, X, y, scoring=scoring, cv=5, n_jobs=-1, return_estimator=True)
-rfc_fit = scores['estimator']
-model = rfs_fit[0]
 print("test accuracy", mean(scores['test_acc']))
 print("precision", mean(scores['test_prec']))
 print("recall", mean(scores['test_rec']))
+model = pipeline.fit(X,y)
 import pickle
-filename = 'random_forest_model.sav'
+from pathlib import Path
+
+filename = Path(experiment_file).parents[0]/'random_forest_model.sav'
 pickle.dump(model, open(filename, 'wb'))

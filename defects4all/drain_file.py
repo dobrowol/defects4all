@@ -15,13 +15,16 @@ args = parser.parse_args()
 def normalize_file(in_file, issue):
     in_dir = Path(in_file).parents[0]
     filename = Path(in_file).stem
-    subprocess.call("./{}/normalize.sh {}".format(issue, str(in_dir)))    
+    subprocess.call("sh ./{}/normalize.sh {}".format(issue, str(in_dir)))    
     assert(Path(in_dir/"normalized"/filename).isfile())
     return in_dir/"normalized"/filename
 def read_persistence(issue):
     return Path(issue)/"drain3_state.bin"
+def read_config(issue):
+    return Path(issue)/"drain3.ini"
 
-#normalized_file = normalize_file(args.file, args.issue)
-drain_ini = read_persistence(args.issue)
+normalized_file = normalize_file(args.file, args.issue)
+persistance_file = read_persistence(args.issue)
+drain_ini = read_config(args.issue)
 
-infering_file(args.file, drain_ini)
+infering_file(args.file, drain_ini, persistance_file)
