@@ -12,26 +12,13 @@ import sys
 import time
 from os.path import dirname
 from drain3 import TemplateMiner
-from drain3.template_miner_config import TemplateMinerConfig
 from pathlib import Path
 
-def infering_file(in_log_file, config_file, persistent_file):
+def infering_file(in_log_file, template_miner):
         
     in_log_dir = Path(in_log_file).parent
-    config = TemplateMinerConfig()
-    config.load(config_file)
-    config.profiling_enabled = False
 
-    from drain3.file_persistence import FilePersistence
-
-    persistence = FilePersistence(str(persistent_file))
-
-    template_miner = TemplateMiner(persistence, config=config)
-    
-    if(in_log_file == "result"):
-        return
-
-    print("infering file ", in_log_file)
+    #print("infering file ", in_log_file)
     with open(in_log_file, errors='replace') as f:
         lines = f.readlines()
     

@@ -59,12 +59,33 @@ window_size=100
 import statistics
 if window_size < len(series):
     range_size = len(series)-window_size
-for window_start in range(range_size):
-    i += 1
-    #print((model.predict_proba([" ".join(series[window_start:window_start+window_size])) >= 0.75).astype(int))
-    #print(window.str.join(" "))
-    if (model.predict_proba([" ".join(series[window_start:window_start+window_size])])).max(1).item() > 0.5:
-        print(model.predict([" ".join(series[window_start:window_start+window_size])]))
+max_prob = 0
+best_window_size = 10
+from tqdm import tqdm
+for window in tqdm(range(10, len(series), 100)):
+    for window_start in range(len(series)-window_size):
+        i += 1
+        prob = (model.predict_proba([" ".join(series[window_start:window_start+window_size])])).max(1).item()
+        if prob > max_prob:
+            max_prob = prob
+            best_window_size = window
+       #print(model.predict([" ".join(series[window_start:window_start+window_size])]))
     #print(model.predict(window.str.join(" ")))
-print("predicted examples ", i)
-#    print(model.predict(window))
+#best_window_size=0
+print("best window ", best_window_size, " has prob ", max_prob)
+
+pred_file = str(Path(args.file).parents[0])+"/"+str(Path(args.file).stem)+".pred"
+pred05_file = str(Path(args.file).parents[0])+"/"+str(Path(args.file).stem)+"_05"+".pred"
+pred = open(pred_file,"w")
+pred05 = open(pred05_file, "w")
+for window_start in range(len(series)-best_window_size):
+    prob = (model.predict_proba([" ".join(series[window_start:window_start+window_size])])).max(1).item()
+    label = model.predict([" ".join(series[window_start:window_start+window_size])])[0]
+    pred.write(str(window_start)+","+str(window_start+window_size)+","+label)
+    if prob > 0.5:
+        pred05.write(str(window_start)+","+str(window_start+window_size)+","+label)
+        print(window_start, window_start+window_size, model.predict([" ".join(series[window_start:window_start+window_size])])[0])
+
+pred.close()
+pred05.close()
+    

@@ -12,28 +12,18 @@ import sys
 import time
 from os.path import dirname
 from drain3 import TemplateMiner
-from drain3.template_miner_config import TemplateMinerConfig
 from tqdm import tqdm
+from pathlib import Path
 
-def parsing_file(in_log_file, in_log_dir, persistent_file):
-    config = TemplateMinerConfig()
-    config.load( "drain3.ini")
-    config.profiling_enabled = False
-
-    from drain3.file_persistence import FilePersistence
-
-    persistence = FilePersistence(persistent_file)
-
-    template_miner = TemplateMiner(persistence, config=config)
+def parsing_file(in_log_file, template_miner):
     
     line_count = 0
     
     if(in_log_file == "result"):
         return
-    if in_log_dir[-1] != "/":
-        in_log_dir = in_log_dir + "/"
-    #print("processing ", in_log_dir + in_log_file)
-    with open(in_log_dir + in_log_file) as f:
+
+    in_dir = Path(in_log_file).parents[0]
+    with open(in_log_file) as f:
         lines = f.readlines()
     
     start_time = time.time()
@@ -55,7 +45,7 @@ def parsing_file(in_log_file, in_log_dir, persistent_file):
     
     
     sorted_clusters = sorted(template_miner.drain.clusters, key=lambda it: it.size, reverse=True)
-    with open("clusters", 'w+') as out_cluster:
+    with open(Path(in_dir)/"clusters", 'w+') as out_cluster:
         out_cluster.write(in_log_file)
         for cluster in sorted_clusters:
             out_cluster.write(str(cluster)+'\n')

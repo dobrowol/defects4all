@@ -1,4 +1,5 @@
 from defects4all.drain_RF_infer import infering_file
+from defects4all.template_miner import get_template_miner
 from pathlib import Path
 import argparse
 import subprocess
@@ -23,8 +24,9 @@ def read_persistence(issue):
 def read_config(issue):
     return Path(issue)/"drain3.ini"
 
-normalized_file = normalize_file(args.file, args.issue)
+#normalized_file = normalize_file(args.file, args.issue)
 persistance_file = read_persistence(args.issue)
 drain_ini = read_config(args.issue)
+template_miner = get_template_miner(drain_ini, persistance_file)
 
-infering_file(args.file, drain_ini, persistance_file)
+infering_file(args.file, template_miner)
