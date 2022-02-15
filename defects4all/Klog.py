@@ -36,7 +36,7 @@ class Klog:
         klog = ""
         if len(sequence) - self.klog_size < 0:
             for token in sequence:
-                klog += token+"t"
+                klog += token+'t'
     
         increment = 1
         if not self.klog_overlap:
@@ -46,7 +46,7 @@ class Klog:
         while i <=len(sequence) - self.klog_size:
             k = ""
             for j in range(self.klog_size):
-                k += sequence[i+j]+"t"
+                k += sequence[i+j]+'t'
             klog += k + ' '
             i += increment
         return klog.rstrip()

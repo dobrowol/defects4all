@@ -33,22 +33,22 @@ template_miner = get_template_miner(config_file, persistent_file)
 from tqdm import tqdm
 if not os.path.isfile(persistent_file):
     print("training drain")
-    for f in tqdm(glob.glob(dest_train_path+"/*.txt")):
+    for f in tqdm(glob.glob(dest_train_path+"/*.log")):
         parsing_file(f, template_miner)    
 #if not glob.glob(dest_train_path+"/*drain"):
 print("infering files")
-for f in  tqdm(glob.glob(dest_train_path+"/*.txt")):
+for f in  tqdm(glob.glob(dest_train_path+"/*.log")):
     infering_file(f, template_miner)    
 #subprocess.call("rm -rf %s/*log"%dest_train_path, shell=True)
 subprocess.call("cp %sresult/*drain %s"% (dest_train_path, dest_train_path), shell=True)
 subprocess.call("rm -rf %sresult" %dest_train_path, shell=True)
 
-for f in  glob.glob(dest_test_path+"/*.log"):
-    infering_file(f.split('/')[-1], dest_test_path, persistent_file)    
+#for f in  glob.glob(dest_test_path+"/*.log"):
+#    infering_file(f, template_miner)    
 
 #subprocess.call("rm -rf %s/*log"%dest_test_path, shell=True)
-subprocess.call("cp %sresult/*drain %s"% (dest_test_path, dest_test_path), shell=True)
-subprocess.call("rm -rf %sresult" %dest_test_path, shell=True)
+#subprocess.call("cp %sresult/*drain %s"% (dest_test_path, dest_test_path), shell=True)
+#subprocess.call("rm -rf %sresult" %dest_test_path, shell=True)
 
 #import defects4all.createFastTextTestSet
 from defects4all.createFastTextTrainSet import create_fasttext_sequence_representation 

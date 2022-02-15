@@ -6,7 +6,7 @@ import csv
 class FastTextTrainer:
 
     def __init__(self, fasttext_dir, in_file):
-        specific_train_in_dir = str(Path(in_file).parent)
+        specific_train_in_dir = str(Path(in_file).parents[0])
         self.filename = in_file
         file_no_ext = Path(in_file).stem
         self.model_file = specific_train_in_dir+"/klog_model_"+file_no_ext

@@ -39,7 +39,7 @@ sos = ["sentence_overlap", "sentence_nooverlap"]
 from tqdm import tqdm
 parsed_dir = PARSED_LOGS+"/"+args.issue
 parsed_runtime_dir = PARSED_LOGS+"/"+args.issue+"/runtime"
-train_log_sequence_file=parsed_dir+"/sequence/ut_log_as_sentence.vec"
+train_log_sequence_file=parsed_dir+"/sequence/output.csv"
 test_log_sequence_file=parsed_runtime_dir+"/sequence/ut_log_as_sentence.vec"
 training_klog = Klog(train_log_sequence_file, klogs_dir)
 #testing_klog = Klog(test_log_sequence_file, klogs_runtime_dir)
